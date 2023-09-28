@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+import com.boomermath.farmed.user.User;
+
 @MappedEntity
 @Getter
 @Setter
@@ -18,4 +20,6 @@ public class EmailUser {
 
     private String email;
     private String password;
+
+    private User user;
 }

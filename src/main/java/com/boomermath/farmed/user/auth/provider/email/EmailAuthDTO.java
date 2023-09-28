@@ -1,5 +1,5 @@
 package com.boomermath.farmed.user.auth.provider.email;
 
 
-public record EmailAuthDTO(String username, String email, String password) {
+public record EmailAuthDTO(String email, String password) {
 }

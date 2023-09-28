@@ -1,5 +1,7 @@
 package com.boomermath;
 
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
 import io.micronaut.runtime.EmbeddedApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
@@ -13,8 +15,12 @@ class FarmedTest {
     @Inject
     EmbeddedApplication<?> application;
 
+    @Inject
+    @Client("/")
+    HttpClient client;
+
     @Test
-    void testItWorks() {
+    void clientTest() {
         Assertions.assertTrue(application.isRunning());
     }
 
