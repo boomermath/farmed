@@ -1,9 +1,10 @@
 package com.boomermath.farmed.user.auth.provider.email;
 
 import com.boomermath.farmed.user.auth.crypto.PasswordEncoder;
-import com.boomermath.farmed.user.auth.provider.AuthService;
 import com.boomermath.farmed.user.auth.provider.AuthDTO;
-import io.micronaut.security.authentication.AuthenticationFailureReason;
+import com.boomermath.farmed.user.auth.provider.AuthService;
+import io.micronaut.security.authentication.AuthenticationException;
+import io.micronaut.validation.validator.Validator;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
@@ -15,25 +16,29 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
     private final EmailUserMapper emailUserMapper;
     private final PasswordEncoder passwordEncoder;
 
+    private Mono<Error> validatePassword(String raw, String actual) {
+        if (passwordEncoder.matches(raw, actual)) {
+            return Mono.empty();
+        } else {
+            return Mono.error(new AuthenticationException("Bad pass"));
+        }
+    }
+
     @Override
     public Mono<AuthDTO> authenticate(EmailAuthDTO data) {
         return emailUserRepository.findByEmail(data.email())
-                .map(emailUser -> {
-                    if (passwordEncoder.matches(data.password(), emailUser.getPassword())) {
-                        return new AuthDTO(true, null);
-                    } else {
-                        return new AuthDTO(false, AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH);
-                    }
-                }).switchIfEmpty(Mono.just(new AuthDTO(true, AuthenticationFailureReason.USER_NOT_FOUND)));
+                .doOnNext(emailUser -> validatePassword(data.password(), emailUser.getPassword()))
+                .map(aBoolean -> aBoolean ? new AuthDTO("") : Mono.error(new AuthenticationException()))
     }
 
     @Override
     public Mono<AuthDTO> create(EmailAuthDTO data) {
-        return Mono.from(emailUserRepository.findByEmail(data.email()))
-                .flatMap(__ -> Mono.just(new AuthDTO(false, AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)))
+        return emailUserRepository.findByEmail(data.email())
+                .flatMap(e -> Mono.error(new AuthenticationException("User exists")))
                 .switchIfEmpty(
                         Mono.from(emailUserRepository.save(emailUserMapper.toEntity(data)))
-                                .map(__ -> new AuthDTO(true, null))
-                );
+                                .map(e -> new AuthDTO(e.getUser().getUsername()))
+                )
+                .cast(AuthDTO.class);
     }
 }

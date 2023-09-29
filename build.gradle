@@ -32,12 +32,12 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("ch.qos.logback:logback-classic")
-    //runtimeOnly("org.postgresql:r2dbc-postgresql")
+    runtimeOnly("org.postgresql:r2dbc-postgresql")
     implementation("commons-logging:commons-logging:1.1.1")
 
     runtimeOnly("io.r2dbc:r2dbc-h2")
     testImplementation("io.micronaut:micronaut-http-client")
-    //testResourcesService("org.postgresql:postgresql")
+    testResourcesService("org.postgresql:postgresql")
     aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.1")
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
