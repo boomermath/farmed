@@ -27,8 +27,9 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
     @Override
     public Mono<AuthDTO> authenticate(EmailAuthDTO data) {
         return emailUserRepository.findByEmail(data.email())
-                .doOnNext(emailUser -> validatePassword(data.password(), emailUser.getPassword()))
-                .map(aBoolean -> aBoolean ? new AuthDTO("") : Mono.error(new AuthenticationException()))
+                .filter(emailUser -> passwordEncoder.matches(data.password(), emailUser.getPassword()))
+                .switchIfEmpty(Mono.error(new AuthenticationException("Invalid")))
+                .map(e -> new AuthDTO(e.getUser().getUsername()));
     }
 
     @Override
