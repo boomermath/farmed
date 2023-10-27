@@ -1,0 +1,34 @@
+google:
+  client-id: 1075570674136-l6q02c9tcvcf1dns408nv2k7dushlbh4.apps.googleusercontent.com
+apple:
+  client-id: a
+  client-secret: a
+micronaut:
+  application:
+    name: farmed
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: '"U1NCc2FXdGxJSEJ5YjJkeVlXMXRhVzVuTGlCRGFHVmpheUJ2ZFhRZ2JYa2dSMmwwYUhWaUlHWnZjaUJ0YjNKbElRPT0"'
+    endpoints:
+      login:
+        path: /login
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/farmed
+    username: boomermath
+    password: DAONE364
+r2dbc:
+  datasources:
+    default:
+      url: r2dbc:postgresql://localhost:5432/farmed
+      username: boomermath
+      password: DAONE364
+flyway:
+  datasources:
+    default:
+      enabled: true

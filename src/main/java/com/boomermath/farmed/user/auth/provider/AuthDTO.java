@@ -1,4 +1,15 @@
 package com.boomermath.farmed.user.auth.provider;
 
-public record AuthDTO(String username) {
+
+import io.micronaut.serde.annotation.Serdeable;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
+
+@Serdeable
+@RequiredArgsConstructor
+@Getter
+public class AuthDTO {
+    private final UUID id;
 }

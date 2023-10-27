@@ -5,16 +5,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import jakarta.inject.Singleton;
 
 @Singleton
-public class BCryptEncoder implements PasswordEncoder {
+public class BCryptPassEncoder implements PasswordEncoder {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
-    public String encode(String rawPass) {
-        return bCryptPasswordEncoder.encode(rawPass);
+    public String encode(String raw) {
+        return bCryptPasswordEncoder.encode(raw);
     }
 
     @Override
-    public boolean matches(String rawPass, String currentPass) {
-        return bCryptPasswordEncoder.matches(rawPass, currentPass);
+    public boolean matches(String raw, String original) {
+        return bCryptPasswordEncoder.matches(raw, original);
     }
 }
