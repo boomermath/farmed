@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class AppleDTO {
-    private final String username;
     private final String code;
     private final String state;
 }

@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Introspected
 @Getter
 @RequiredArgsConstructor
-public class GoogleDTO {
-    private final String idToken;
-    private final String username;
+public class GoogleCodeDTO {
+    private final String code;
 }

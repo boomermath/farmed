@@ -1,4 +1,4 @@
-package com.boomermath.farmed.user.auth.data;
+package com.boomermath.farmed.user.auth.identity;
 
 public enum IdentityType {
     EMAIL,

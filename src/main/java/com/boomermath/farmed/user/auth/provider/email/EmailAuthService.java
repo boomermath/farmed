@@ -1,14 +1,11 @@
 package com.boomermath.farmed.user.auth.provider.email;
 
-import com.boomermath.farmed.user.UserService;
+import com.boomermath.farmed.user.auth.UserAuthService;
 import com.boomermath.farmed.user.auth.crypto.PasswordEncoder;
-import com.boomermath.farmed.user.auth.data.Identity;
-import com.boomermath.farmed.user.auth.data.IdentityRepository;
-import com.boomermath.farmed.user.auth.data.IdentityType;
-import com.boomermath.farmed.user.auth.provider.AuthDTO;
+import com.boomermath.farmed.user.auth.identity.Identity;
+import com.boomermath.farmed.user.auth.identity.IdentityRepository;
+import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.AuthService;
-import com.boomermath.farmed.user.data.User;
-import com.boomermath.farmed.user.data.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Singleton;
@@ -19,7 +16,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class EmailAuthService implements AuthService<EmailAuthDTO> {
     private final IdentityRepository identityRepository;
-    private final UserService userService;
+    private final UserAuthService userAuthService;
     private final PasswordEncoder encoder;
 
     @Override
@@ -28,19 +25,13 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
     }
 
     @Override
-    public Mono<AuthDTO> authenticate(EmailAuthDTO data) {
+    public Mono<Identity> authenticate(EmailAuthDTO data) {
         return identityRepository.findByHashAndIdentityType(encoder.encode(data.getEmail() + data.getPassword()), IdentityType.EMAIL)
-                .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)))
-                .map(e -> new AuthDTO(e.getUser().getId()));
+                .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)));
     }
 
     @Override
-    public Mono<AuthDTO> create(EmailAuthDTO data) {
-        return userService.checkUserExistsOrCreate(data.getUsername(), data.getEmail(), encoder.encode(data.getEmail() + data.getPassword()), IdentityType.EMAIL);
-    }
-
-    @Override
-    public Class<EmailAuthDTO> getDataType() {
-        return EmailAuthDTO.class;
+    public Mono<Identity> create(EmailAuthDTO data, String username) {
+        return userAuthService.checkUserExistsOrCreate(username, data.getEmail(), encoder.encode(data.getEmail() + data.getPassword()), IdentityType.EMAIL);
     }
 }

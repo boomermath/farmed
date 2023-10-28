@@ -1,10 +1,7 @@
 package com.boomermath.farmed.user.data;
 
-import com.boomermath.farmed.user.auth.data.Identity;
-import io.micronaut.data.annotation.AutoPopulated;
-import io.micronaut.data.annotation.DateCreated;
-import io.micronaut.data.annotation.Id;
-import io.micronaut.data.annotation.MappedEntity;
+import com.boomermath.farmed.user.auth.identity.Identity;
+import io.micronaut.data.annotation.*;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +24,9 @@ public class User {
     @NonNull
     private String username;
     @DateCreated
+    @MappedProperty(value = "created_at", alias = "createdAt")
     private LocalDateTime createdAt;
-    private Identity login;
+
+  //  @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user")
+    private Identity identity;
 }

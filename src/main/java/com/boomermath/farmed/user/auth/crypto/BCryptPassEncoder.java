@@ -1,8 +1,7 @@
 package com.boomermath.farmed.user.auth.crypto;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import jakarta.inject.Singleton;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Singleton
 public class BCryptPassEncoder implements PasswordEncoder {
