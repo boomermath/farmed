@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
+import java.util.List;
 
 @MappedEntity
 @Getter
@@ -18,6 +19,7 @@ public class Contact {
 
     private String phoneNumber;
     private String email;
+    private String website;
 
-
+    private List<Social> social;
 }
