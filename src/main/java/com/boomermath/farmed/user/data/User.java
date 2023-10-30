@@ -27,6 +27,10 @@ public class User {
     @MappedProperty(value = "created_at", alias = "createdAt")
     private LocalDateTime createdAt;
 
-  //  @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user")
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user")
     private Identity identity;
+
+    public User(UUID id) {
+      this.id = id;
+    }
 }

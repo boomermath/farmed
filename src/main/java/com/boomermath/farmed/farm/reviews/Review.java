@@ -11,11 +11,16 @@ import io.micronaut.data.annotation.DateCreated;
 import io.micronaut.data.annotation.DateUpdated;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 
 @MappedEntity
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class Review {
@@ -23,9 +28,12 @@ public class Review {
     @AutoPopulated
     private UUID id;
 
-    private User user;
 
+    @NonNull
+    @Min(0)
+    @Max(5)
     private int stars;
+    @NonNull
     private String text;
     
     @DateCreated
@@ -33,5 +41,9 @@ public class Review {
     @DateUpdated
     private LocalDateTime updatedAt;
 
+    @NonNull
+    private User user;
+
+    @NonNull
     private Farm farm;
 }

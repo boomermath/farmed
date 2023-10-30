@@ -29,6 +29,7 @@ public class UserAuthenticationDTO implements Authentication {
     public String getName() {
         return user.getUsername();
     }
+    
     public static UserAuthenticationDTO from(User user) {
         return new UserAuthenticationDTO(user);
     }

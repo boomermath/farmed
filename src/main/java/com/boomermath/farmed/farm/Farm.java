@@ -18,5 +18,7 @@ public class Farm {
 
     public String name;
 
-    public String website;
+    public Farm(UUID id) {
+        this.id = id;
+    }
 }
