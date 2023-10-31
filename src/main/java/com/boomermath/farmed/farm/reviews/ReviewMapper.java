@@ -11,12 +11,12 @@ import jakarta.inject.Singleton;
 @Singleton
 public class ReviewMapper {
     public Review toEntity(ReviewBodyDTO reviewDTO, UUID userId, UUID farmId) {
-        return new Review(
-            reviewDTO.getStars(),
-            reviewDTO.getText(),
-            new User(userId),
-            new Farm(farmId)
-        );
+        return Review.builder()
+                .user(User.builder().id(userId).build())
+                .farm(Farm.builder().id(farmId).build())
+                .stars(reviewDTO.getStars())
+                .text(reviewDTO.getText())
+                .build();
     }
 
     public ReviewResponseDTO toDTO(Review review) {
@@ -24,7 +24,7 @@ public class ReviewMapper {
 
         return new ReviewResponseDTO(
             review.getId(), review.getStars(), review.getText(),
-             new UserDTO(user.getId(), user.getUsername()),
+             user,
              review.getUpdatedAt()
         );
     }

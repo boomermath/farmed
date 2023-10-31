@@ -37,3 +37,4 @@ r2dbc:
       url: r2dbc:postgresql://localhost:5432/farmed
       username: boomermath
       password: DAONE364
+      # schema-generate: create_drop

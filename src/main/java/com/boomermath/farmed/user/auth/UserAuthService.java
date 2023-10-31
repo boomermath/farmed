@@ -26,9 +26,20 @@ public class UserAuthService {
     public Mono<Identity> checkUserExistsOrCreate(String username, String email, String hash, IdentityType identityType) {
         return userRepository.findByUsernameOrEmail(username, email)
                 .flatMap(user -> Mono.error(AuthenticationResponse.exception(user.getEmail().equals(email) ? "EMAIL_EXISTS" : "USERNAME_EXISTS")))
-                .switchIfEmpty(Mono.defer(() -> userRepository.save(new User(email, username))))
+                .switchIfEmpty(Mono.defer(() -> userRepository.save(
+                        User.builder()
+                                .email(email)
+                                .username(username)
+                                .build()
+                )))
                 .cast(User.class)
-                .flatMap(u -> identityRepository.save(new Identity(identityType, hash, u)));
+                .flatMap(u -> identityRepository.save(
+                        Identity.builder()
+                                .identityType(identityType)
+                                .user(u)
+                                .hash(hash)
+                                .build()
+                ));
     }
 
     private Mono<AccessRefreshToken> identityToToken(Identity identity) {

@@ -18,4 +18,6 @@ public class Social {
 
     private SocialType socialType;
     private String username;
+
+    private Contact contact;
 }

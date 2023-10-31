@@ -2,10 +2,7 @@ package com.boomermath.farmed.user.auth.identity;
 
 import com.boomermath.farmed.user.data.User;
 import io.micronaut.data.annotation.*;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,7 +10,7 @@ import java.util.UUID;
 @MappedEntity
 @Getter
 @Setter
-@RequiredArgsConstructor
+@Builder
 public class Identity {
 
     @Id

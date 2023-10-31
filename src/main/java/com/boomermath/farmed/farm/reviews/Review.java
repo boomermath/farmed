@@ -13,14 +13,11 @@ import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 @MappedEntity
-@RequiredArgsConstructor
+@Builder
 @Getter
 @Setter
 public class Review {
@@ -28,8 +25,6 @@ public class Review {
     @AutoPopulated
     private UUID id;
 
-
-    @NonNull
     @Min(0)
     @Max(5)
     private int stars;

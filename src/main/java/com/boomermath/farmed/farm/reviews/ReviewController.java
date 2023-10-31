@@ -25,7 +25,7 @@ public class ReviewController {
     
     @Get("/{farmId}/reviews")
     public Mono<Page<ReviewResponseDTO>> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page, @QueryValue Optional<Integer> size){
-        return reviewRepository.findByFarmIdOrderByUpdateAtDesc(farmId, Pageable.from(page.orElse(0), size.orElse(10)));
+        return reviewRepository.findByFarmIdOrderByUpdatedAtDesc(farmId, Pageable.from(page.orElse(0), size.orElse(10)));
     }
 
     @Post("/{farmId}/reviews")

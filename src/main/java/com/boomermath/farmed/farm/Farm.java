@@ -1,24 +1,30 @@
 package com.boomermath.farmed.farm;
 
+import com.boomermath.farmed.farm.reviews.Review;
 import io.micronaut.data.annotation.AutoPopulated;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
+import io.micronaut.data.annotation.Relation;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @MappedEntity
+@Builder
 @Getter
 @Setter
 public class Farm {
     @Id
     @AutoPopulated
-    public UUID id;
+    private UUID id;
 
-    public String name;
+    @NonNull
+    private String name;
 
-    public Farm(UUID id) {
-        this.id = id;
-    }
+    @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "farm", cascade = Relation.Cascade.ALL)
+    private List<Review> reviews;
 }
