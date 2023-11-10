@@ -7,8 +7,8 @@ import io.micronaut.data.annotation.Relation;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 @MappedEntity
 @Getter

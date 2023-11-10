@@ -11,8 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Identity {
-
     @Id
     @AutoPopulated
     private UUID id;
@@ -20,10 +21,10 @@ public class Identity {
     @NonNull
     @MappedProperty(value = "identity_type", alias = "identityType")
     private IdentityType identityType;
+
     @NonNull
     private String hash;
 
-    @NonNull
     private User user;
 
     @DateCreated

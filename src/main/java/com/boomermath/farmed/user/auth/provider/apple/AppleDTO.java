@@ -1,13 +1,15 @@
 package com.boomermath.farmed.user.auth.provider.apple;
 
+import com.boomermath.farmed.user.auth.provider.UserRegisterDTO;
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Introspected
 @Getter
-@RequiredArgsConstructor
-public class AppleDTO {
+@AllArgsConstructor
+public class AppleDTO implements UserRegisterDTO {
     private final String code;
     private final String state;
+    private final String username;
 }

@@ -1,21 +1,14 @@
 package com.boomermath.farmed.farm.reviews;
 
-import java.security.Principal;
-import java.util.Optional;
-import java.util.UUID;
-
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Delete;
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.*;
 import io.micronaut.security.authentication.Authentication;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Controller("/farm")
 @RequiredArgsConstructor
@@ -41,18 +34,16 @@ public class ReviewController {
     }
 
     @Post("/{farmId}/reviews/{reviewId}")
-    public Mono<Review> updateReview(Authentication authentication, @Body ReviewBodyDTO reviewDTO, @PathVariable("reviewId") UUID reviewId) {
+    public Mono<Review> updateReview(Authentication authentication, @Body ReviewBodyDTO reviewDTO, @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
-        Review review = reviewMapper.toEntity(reviewDTO, userId, null);
-        review.setId(reviewId);
-
-        return reviewRepository.updateOne(review);
+        return reviewRepository.updateOne(reviewId, farmId, userId, reviewDTO);
     }
 
     @Delete("/{farmId}/reviews/{reviewId}")
-    public Mono<Long> deleteReview(Authentication authentication, @PathVariable("reviewId") UUID reviewId) {
+    public Mono<Long> deleteReview(Authentication authentication, @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
-        return reviewRepository.deleteById(reviewId);
+
+        return reviewRepository.deleteOne(reviewId, farmId, userId);
     }
 }

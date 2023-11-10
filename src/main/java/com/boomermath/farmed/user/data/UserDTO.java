@@ -1,10 +1,10 @@
 package com.boomermath.farmed.user.data;
 
-import java.util.UUID;
-
 import io.micronaut.core.annotation.Introspected;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.UUID;
 
 @Introspected
 @Getter

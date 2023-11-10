@@ -1,12 +1,10 @@
 package com.boomermath.farmed.farm.reviews;
 
-import java.util.UUID;
-
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.user.data.User;
-import com.boomermath.farmed.user.data.UserDTO;
-
 import jakarta.inject.Singleton;
+
+import java.util.UUID;
 
 @Singleton
 public class ReviewMapper {
@@ -20,11 +18,9 @@ public class ReviewMapper {
     }
 
     public ReviewResponseDTO toDTO(Review review) {
-        User user = review.getUser();
-
         return new ReviewResponseDTO(
             review.getId(), review.getStars(), review.getText(),
-             user,
+             review.getUser(),
              review.getUpdatedAt()
         );
     }

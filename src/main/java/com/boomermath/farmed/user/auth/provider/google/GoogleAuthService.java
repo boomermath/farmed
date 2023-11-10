@@ -1,28 +1,31 @@
 package com.boomermath.farmed.user.auth.provider.google;
 
-import com.boomermath.farmed.user.auth.UserAuthService;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.data.User;
+import com.boomermath.farmed.user.data.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @Singleton
+@Named("google")
 @RequiredArgsConstructor
 public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
     private final GoogleClient googleClient;
     private final IdentityRepository identityRepository;
-    private final UserAuthService userAuthService;
 
     @Override
-    public String getType() {
-        return "GOOGLE";
+    public GoogleCodeDTO from(Map<String, String> attributes) {
+        return new GoogleCodeDTO(attributes.get("code"), attributes.get("username"));
     }
-
 
     @Override
     public Mono<Identity> authenticate(GoogleCodeDTO data) {
@@ -32,10 +35,18 @@ public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
     }
 
     @Override
-    public Mono<Identity> create(GoogleCodeDTO data, String username) {
+    public Mono<Identity> create(GoogleCodeDTO data) {
         return googleClient.fetchTokenResponse(data.getCode())
-                .flatMap(token -> userAuthService.checkUserExistsOrCreate(
-                        username, token.getEmail(), token.getSubject(), IdentityType.GOOGLE
-                ));
+                .map(token ->
+                        Identity.builder()
+                                .identityType(IdentityType.GOOGLE)
+                                .user(
+                                        User.builder()
+                                                .email(token.getEmail())
+                                                .username(data.getUsername())
+                                                .build()
+                                )
+                                .hash(token.getSubject())
+                                .build());
     }
 }
