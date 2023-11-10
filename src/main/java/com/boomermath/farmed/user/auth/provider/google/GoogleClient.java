@@ -10,25 +10,25 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
 @Singleton
-@RequiredArgsConstructor
 public class GoogleClient {
-    @Client("https://oauth2.googleapis.com")
-    @Inject
     private final HttpClient httpClient;
-    @Value("${micronaut.security.oauth2.clients.google.client-id}")
     private final String clientId;
-    @Value("${micronaut.security.oauth2.clients.google.client-secret}")
     private final String clientSecret;
     private final GoogleIdTokenVerifier googleIdTokenVerifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance()).build();
 
+    public GoogleClient(@Client("https://oauth2.googleapis.com") HttpClient httpClient,
+                        @Value("${micronaut.security.oauth2.clients.google.client-id}") String clientId,
+                        @Value("${micronaut.security.oauth2.clients.google.client-secret}") String clientSecret) {
+        this.httpClient = httpClient;
+        this.clientId = clientId;
+        this.clientSecret = clientSecret;
+    }
 
     public Mono<GoogleIdToken.Payload> fetchTokenResponse(String code) {
         Map<String, String> googleTokenRequest = Map.of(
@@ -46,7 +46,7 @@ public class GoogleClient {
                     GoogleIdToken googleIdToken;
 
                     try {
-                      googleIdToken  = googleIdTokenVerifier.verify(idToken);
+                        googleIdToken = googleIdTokenVerifier.verify(idToken);
                     } catch (Exception e) {
                         return Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.UNKNOWN));
                     }

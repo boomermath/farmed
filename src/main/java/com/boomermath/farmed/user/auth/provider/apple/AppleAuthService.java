@@ -1,6 +1,5 @@
 package com.boomermath.farmed.user.auth.provider.apple;
 
-import com.boomermath.farmed.user.auth.UserAuthService;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
@@ -15,8 +14,6 @@ import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import com.nimbusds.jwt.proc.JWTClaimsSetVerifier;
-import io.micronaut.context.annotation.Value;
-import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -24,22 +21,16 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
-@Singleton
 @RequiredArgsConstructor
 public class AppleAuthService implements AuthService<AppleDTO> {
-    private final UserAuthService userAuthService;
     private final IdentityRepository identityRepository;
     private final AppleClient appleClient;
-    @Value("${apple.client-id}")
+    //   @Value("${apple.client-id}")
     private final String clientId;
-    @Value("${apple.client-secret}")
+//    @Value("${apple.client-secret}")
     private final String clientSecret;
-
-    @Override
-    public String getType() {
-        return "APPLE";
-    }
 
     private Mono<AppleTokenData> verifyToken(AppleTokenResponse appleTokenResponse) {
         return appleClient.getPublicKeys()
@@ -67,6 +58,11 @@ public class AppleAuthService implements AuthService<AppleDTO> {
     }
 
     @Override
+    public AppleDTO from(Map<String, String> attributes) {
+        return new AppleDTO(attributes.get("code"), attributes.get("state"), attributes.get("username"));
+    }
+
+    @Override
     public Mono<Identity> authenticate(AppleDTO data) {
         return appleClient.fetchToken(new AppleTokenRequest(clientId, clientSecret, data.getCode()))
                 .flatMap(this::verifyToken)
@@ -74,9 +70,7 @@ public class AppleAuthService implements AuthService<AppleDTO> {
     }
 
     @Override
-    public Mono<Identity> create(AppleDTO data, String username) {
-        return appleClient.fetchToken(new AppleTokenRequest(clientId, clientSecret, data.getCode()))
-                .flatMap(this::verifyToken)
-                .flatMap(appleTokenData -> userAuthService.checkUserExistsOrCreate(username, appleTokenData.getEmail(), appleTokenData.getId(), IdentityType.APPLE));
+    public Mono<Identity> create(AppleDTO data) {
+        return Mono.empty();
     }
 }

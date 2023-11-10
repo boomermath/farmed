@@ -1,12 +1,16 @@
 package com.boomermath.farmed.user.auth.provider.google;
 
+import com.boomermath.farmed.user.auth.provider.UserRegisterDTO;
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 
 @Introspected
 @Getter
-@RequiredArgsConstructor
-public class GoogleCodeDTO {
+@AllArgsConstructor
+public class GoogleCodeDTO implements UserRegisterDTO {
+    @NonNull
     private final String code;
+    private final String username;
 }
