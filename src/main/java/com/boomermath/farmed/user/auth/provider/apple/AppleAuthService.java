@@ -64,9 +64,10 @@ public class AppleAuthService implements AuthService<AppleDTO> {
 
     @Override
     public Mono<Identity> authenticate(AppleDTO data) {
-        return appleClient.fetchToken(new AppleTokenRequest(clientId, clientSecret, data.getCode()))
-                .flatMap(this::verifyToken)
-                .flatMap(appleTokenData -> identityRepository.findByHashAndIdentityType(appleTokenData.getId(), IdentityType.APPLE));
+        return Mono.empty();
+//        return appleClient.fetchToken(new AppleTokenRequest(clientId, clientSecret, data.getCode()))
+//                .flatMap(this::verifyToken)
+//                .flatMap(appleTokenData -> identityRepository.findByHashAndIdentityType(appleTokenData.getId(), IdentityType.APPLE));
     }
 
     @Override

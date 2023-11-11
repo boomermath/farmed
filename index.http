@@ -1,8 +1,3 @@
-POST http://localhost:8080/user/auth/email/register
+GET http://localhost:8080/farm/17c27009-d34a-46fa-8d10-6002c18c66a1/reviews
 Content-Type: application/json
-
-{
-  "email": "boomermath@gmail.com",
-  "password": "daone",
-  "username": "boomermath"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNjk5NjcxMTkzLCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiN2U0YjhjOTEtY2U1YS00OGNlLTg3N2UtNzhjZDY3ZTQ0YjJkIiwiZXhwIjoxNjk5Njc0NzkzLCJpYXQiOjE2OTk2NzExOTN9.4SnwD2nhsxtnnNnqGE0Avniuo8gpDfMdQjCMV_g1iTA

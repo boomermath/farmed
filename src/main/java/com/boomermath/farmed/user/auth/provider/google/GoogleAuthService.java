@@ -20,6 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
     private final GoogleClient googleClient;
+    private final UserRepository userRepository;
     private final IdentityRepository identityRepository;
 
     @Override
@@ -34,19 +35,23 @@ public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
                 .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)));
     }
 
+
     @Override
     public Mono<Identity> create(GoogleCodeDTO data) {
         return googleClient.fetchTokenResponse(data.getCode())
-                .map(token ->
-                        Identity.builder()
-                                .identityType(IdentityType.GOOGLE)
-                                .user(
-                                        User.builder()
-                                                .email(token.getEmail())
-                                                .username(data.getUsername())
-                                                .build()
-                                )
-                                .hash(token.getSubject())
-                                .build());
+                .map(t -> Identity.builder()
+                        .identityType(IdentityType.EMAIL)
+                        .hash(t.getSubject())
+                        .user(
+                                User.builder()
+                                        .username(data.getUsername())
+                                        .email(t.getEmail())
+                                        .build()
+                        )
+                        .build())
+                .flatMap(i ->
+                        userRepository.save(i.getUser())
+                                .flatMap(u -> identityRepository.save(i))
+                );
     }
 }
