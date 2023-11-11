@@ -1,4 +1,4 @@
-package com.boomermath.farmed.farm.reviews;
+package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.user.data.User;
@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Singleton
 public class ReviewMapper {
-    public Review toEntity(ReviewBodyDTO reviewDTO, UUID userId, UUID farmId) {
+    public Review toEntity(ReviewUpdateDTO reviewDTO, UUID userId, UUID farmId) {
         return Review.builder()
                 .user(User.builder().id(userId).build())
                 .farm(Farm.builder().id(farmId).build())
@@ -17,8 +17,8 @@ public class ReviewMapper {
                 .build();
     }
 
-    public ReviewResponseDTO toDTO(Review review) {
-        return new ReviewResponseDTO(
+    public ReviewDTO toDTO(Review review) {
+        return new ReviewDTO(
             review.getId(), review.getStars(), review.getText(),
              review.getUser(),
              review.getUpdatedAt()

@@ -1,4 +1,4 @@
-package com.boomermath.farmed.farm.reviews;
+package com.boomermath.farmed.farm.review;
 
 import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
@@ -20,12 +20,12 @@ public class ReviewController {
     private final ReviewMapper reviewMapper;
     
     @Get("/reviews")
-    public Mono<Page<ReviewResponseDTO>> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page, @QueryValue Optional<Integer> size){
+    public Mono<Page<ReviewDTO>> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page, @QueryValue Optional<Integer> size){
         return reviewRepository.findByFarmIdOrderByUpdatedAtDesc(farmId, Pageable.from(page.orElse(0), size.orElse(10)));
     }
 
     @Post("/reviews")
-    public Mono<ReviewResponseDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId, @Body ReviewBodyDTO reviewDTO) {
+    public Mono<ReviewDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId, @Body ReviewUpdateDTO reviewDTO) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
         return reviewRepository.existsByUserId(userId)
@@ -37,7 +37,7 @@ public class ReviewController {
     }
 
     @Post("/reviews/{reviewId}")
-    public Mono<Review> updateReview(Authentication authentication, @Body ReviewBodyDTO reviewDTO, @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
+    public Mono<Review> updateReview(Authentication authentication, @Body ReviewUpdateDTO reviewDTO, @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
         return reviewRepository.updateOne(reviewId, farmId, userId, reviewDTO);

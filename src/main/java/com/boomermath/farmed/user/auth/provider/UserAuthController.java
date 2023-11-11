@@ -23,7 +23,7 @@ public class UserAuthController<E extends UserRegisterDTO> {
     private final AccessRefreshTokenGenerator tokenGenerator;
     private final Map<String, AuthService<E>> authServiceMap;
 
-    public AuthService<E> getAuthService(String authMethod) {
+    private AuthService<E> getAuthService(String authMethod) {
         if (!authServiceMap.containsKey(authMethod)) {
             throw new AuthenticationException("INVALID_AUTH_METHOD");
         }

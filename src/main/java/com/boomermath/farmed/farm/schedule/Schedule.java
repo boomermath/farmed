@@ -1,4 +1,4 @@
-package com.boomermath.farmed.farm.hours;
+package com.boomermath.farmed.farm.schedule;
 
 
 import io.micronaut.data.annotation.AutoPopulated;

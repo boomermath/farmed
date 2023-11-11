@@ -1,17 +1,15 @@
-package com.boomermath.farmed.user.data;
+package com.boomermath.farmed.farm;
+
+import java.util.UUID;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-
-import java.util.UUID;
 
 @Serdeable
 @Introspected
 @Data
-public class UserDTO {
+public class FarmDTO {
     private final UUID id;
-    private final String username;
+    private final String name;
 }

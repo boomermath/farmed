@@ -1,4 +1,4 @@
-package com.boomermath.farmed.farm.hours;
+package com.boomermath.farmed.farm.schedule;
 
 public enum DayOfWeek {
     SUNDAY,

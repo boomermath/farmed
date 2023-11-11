@@ -27,7 +27,6 @@ public class User {
     private String username;
 
     @DateCreated
-    @MappedProperty(value = "created_at", alias = "createdAt")
     private LocalDateTime createdAt;
 
     @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user")

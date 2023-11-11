@@ -27,13 +27,12 @@ flyway:
       baseline-on-migrate: false
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/farmed
-    username: boomermath
-    password: DAONE364
+    url: jdbc:h2:mem://testdb;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
 r2dbc:
   datasources:
     default:
-      db-type: postgresql
-      url: r2dbc:postgresql://localhost:5432/farmed
-      username: boomermath
-      password: DAONE364
+      dialect: h2
+      url: r2dbc:h2:file:///./testdb;DATABASE_TO_UPPER=false
+      username: sa
+      schema-generate: create_drop
