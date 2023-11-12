@@ -3,6 +3,7 @@ package com.boomermath.farmed.farm;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ import java.util.UUID;
 public class FarmController {
     private final FarmRepository farmRepository;
 
-    @Get("/info")
-    public Mono<FarmDTO> farmInfo(@PathVariable UUID farmId) {
+    @Get("/")
+    public Mono<FarmDTO> farmInfo(@PathVariable UUID farmId, @QueryValue boolean contact, @QueryValue boolean schedule) {
+        
         return farmRepository.findOneById(farmId);
     }
 }

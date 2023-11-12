@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Introspected
 @Getter
 @RequiredArgsConstructor
-public class ReviewUpdateDTO {
+public class ReviewRequestDTO {
     private final int stars;
     @Min(1)
     @Max(5)

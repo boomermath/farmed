@@ -29,6 +29,6 @@ public class User {
     @DateCreated
     private LocalDateTime createdAt;
 
-    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user")
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user", cascade = Relation.Cascade.ALL)
     private Identity identity;
 }

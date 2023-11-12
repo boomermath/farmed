@@ -10,6 +10,9 @@ import lombok.Setter;
 import java.util.List;
 import java.util.UUID;
 
+import com.boomermath.farmed.farm.Farm;
+import com.boomermath.farmed.farm.contact.social.Social;
+
 @MappedEntity
 @Getter
 @Setter
@@ -21,6 +24,8 @@ public class Contact {
     private String phoneNumber;
     private String email;
     private String website;
+
+    private Farm farm;
 
     @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "contact", cascade = Relation.Cascade.ALL)
     private List<Social> social;

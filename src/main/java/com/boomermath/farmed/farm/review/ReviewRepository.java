@@ -15,13 +15,13 @@ import java.util.UUID;
 @R2dbcRepository(dialect = Dialect.POSTGRES)
 public interface ReviewRepository extends ReactorPageableRepository<Review, UUID> {
 
-    @Join(value = "user", type = Join.Type.FETCH)
-    Mono<Page<ReviewDTO>> findByFarmIdOrderByUpdatedAtDesc(UUID farmId, Pageable pageable);
+    @Join("user")
+    Mono<Page<Review>> findByFarmIdOrderByUpdatedAtDesc(UUID farmId, Pageable pageable);
     
     Mono<Boolean> existsByUserId(UUID userId);
     
     @Query("UPDATE review SET stars=:newRev.stars, text=:newRev.text WHERE id=:reviewId AND user_id=:userId AND farm_id=:farmId")
-    Mono<Review> updateOne(@Id UUID reviewId, UUID farmId, UUID userId, ReviewUpdateDTO newRev);
+    Mono<Review> updateOne(@Id UUID reviewId, UUID farmId, UUID userId, ReviewRequestDTO newRev);
 
     @Query("DELETE FROM Review WHERE id=:reviewId AND user_id=:userId AND farm_id=:farmId")
     Mono<Long> deleteOne(@Id UUID reviewId, UUID farmId, UUID userId);

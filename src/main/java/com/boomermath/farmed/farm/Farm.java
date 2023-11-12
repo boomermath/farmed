@@ -11,10 +11,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.nio.file.WatchEvent.Kind;
 import java.util.List;
 import java.util.UUID;
 
+import com.boomermath.farmed.farm.contact.Contact;
 import com.boomermath.farmed.farm.review.Review;
+import com.boomermath.farmed.farm.schedule.DailySchedule;
 
 @MappedEntity
 @Serdeable
@@ -23,7 +26,7 @@ import com.boomermath.farmed.farm.review.Review;
 @Setter
 public class Farm {
     @Id
-    //@AutoPopulated
+    @AutoPopulated
     private UUID id;
 
     @NonNull
@@ -32,4 +35,10 @@ public class Farm {
     @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "farm", cascade = Relation.Cascade.ALL)
     @Nullable
     private List<Review> reviews;
+
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "farm", cascade = Relation.Cascade.ALL)
+    private Contact contact;
+
+    @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "farm", cascade = Relation.Cascade.ALL)
+    private List<DailySchedule> schedule;
 }

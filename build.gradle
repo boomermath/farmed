@@ -40,7 +40,7 @@ dependencies {
     runtimeOnly("io.r2dbc:r2dbc-h2")
    // testResourcesService("org.postgresql:postgresql")
 
-    aotPlugins platform("io.micronaut.platform:micronaut-platform:4.2.0-SNAPSHOT")
+    aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")
     aotPlugins("io.micronaut.security:micronaut-security-aot")
 }
 

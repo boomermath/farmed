@@ -45,7 +45,7 @@ public class UserAuthController<E extends UserRegisterDTO> {
     @Post("/{authMethod}/register")
     public Mono<AccessRefreshToken> register(@Body Map<String, String> body, @PathVariable String authMethod) {
         AuthService<E> authService = getAuthService(authMethod);
-
+        
         return Mono.just(authService.from(body))
                 .flatMap(authService::create)
                 .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
