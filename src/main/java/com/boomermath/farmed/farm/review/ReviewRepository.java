@@ -15,7 +15,7 @@ import java.util.UUID;
 @R2dbcRepository(dialect = Dialect.POSTGRES)
 public interface ReviewRepository extends ReactorPageableRepository<Review, UUID> {
 
-    @Join("user")
+    @Join(value = "user", type = Join.Type.FETCH)
     Mono<Page<ReviewDTO>> findByFarmIdOrderByUpdatedAtDesc(UUID farmId, Pageable pageable);
     
     Mono<Boolean> existsByUserId(UUID userId);

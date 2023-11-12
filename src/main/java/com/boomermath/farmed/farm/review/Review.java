@@ -3,6 +3,7 @@ package com.boomermath.farmed.farm.review;
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.user.data.User;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.*;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.annotation.Nullable;
@@ -16,7 +17,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Serdeable
 @MappedEntity
 @Builder
 @Getter
