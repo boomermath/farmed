@@ -18,7 +18,7 @@ public class FarmController {
     private final FarmRepository farmRepository;
 
     @Get("/")
-    public Mono<FarmDTO> farmInfo(@PathVariable UUID farmId, @QueryValue boolean contact, @QueryValue boolean schedule) {
+    public Mono<Farm> farmInfo(@PathVariable UUID farmId, @QueryValue boolean contact, @QueryValue boolean schedule) {
         
         return farmRepository.findOneById(farmId);
     }

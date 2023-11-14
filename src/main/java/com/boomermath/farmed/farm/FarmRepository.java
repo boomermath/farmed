@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @R2dbcRepository(dialect = Dialect.POSTGRES)
 public interface FarmRepository extends ReactorCrudRepository<Farm, UUID> {
-    Mono<FarmDTO> findOneById(UUID id);
+    Mono<Farm> findOneById(UUID id);
 }

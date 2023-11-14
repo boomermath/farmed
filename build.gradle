@@ -36,9 +36,9 @@ dependencies {
     implementation("io.micronaut:micronaut-http-client")
     testImplementation("io.micronaut:micronaut-http-client")
 
-    //runtimeOnly("org.postgresql:r2dbc-postgresql")
-    runtimeOnly("io.r2dbc:r2dbc-h2")
-   // testResourcesService("org.postgresql:postgresql")
+    runtimeOnly("org.postgresql:r2dbc-postgresql")
+    //runtimeOnly("io.r2dbc:r2dbc-h2")
+    testResourcesService("org.postgresql:postgresql")
 
     aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")
     aotPlugins("io.micronaut.security:micronaut-security-aot")
