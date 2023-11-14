@@ -7,6 +7,5 @@ image: gitpod/workspace-postgres
 
 tasks:
   - init: sdk install java 17.0.6-tem
-  - init: ./gradlew build
 
 
