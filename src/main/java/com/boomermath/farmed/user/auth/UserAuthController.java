@@ -1,6 +1,5 @@
 package com.boomermath.farmed.user.auth;
 
-
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.PathVariable;
@@ -18,49 +17,42 @@ import java.util.Map;
 
 import com.boomermath.farmed.user.auth.dto.UserAuthenticationDTO;
 import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
-import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.auth.identity.Identity;
+import com.boomermath.farmed.user.auth.provider.Provider;
 import com.boomermath.farmed.user.data.UserRepository;
 
 @Controller("/user/auth")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @RequiredArgsConstructor
 public class UserAuthController<E> {
-    private final AccessRefreshTokenGenerator tokenGenerator;
     private final UserRepository userRepository;
-    private final Map<String, AuthService<E>> authServiceMap;
+    private final Map<String, Provider<E>> authServiceMap;
 
-    private AuthService<E> getAuthService(String authMethod) {
-        if (!authServiceMap.containsKey(authMethod)) {
-            throw new AuthenticationException("INVALID_AUTH_METHOD");
-        }
 
-        return authServiceMap.get(authMethod);
-    }
 
     @Post("/{authMethod}/login")
     public Mono<AccessRefreshToken> login(@Body Map<String, String> body, @PathVariable String authMethod) {
-        AuthService<E> authService = getAuthService(authMethod);
+        Provider<E> authService = getAuthService(authMethod);
 
         return authService.authenticate(authService.from(body))
-                .map(i -> new UserAuthenticationDTO(i.getUser()))
-                .map(tokenGenerator::generate)
-                .flatMap(Mono::justOrEmpty);
+                .map(this::identityToToken);
     }
 
     @Post("/{authMethod}/register")
     public Mono<AccessRefreshToken> register(@Body Map<String, String> body, @PathVariable String authMethod) {
-        AuthService<E> authService = getAuthService(authMethod);
+        Provider<E> authService = getAuthService(authMethod);
 
-        UserRegisterDTO userRegisterDTO = UserRegisterDTO.from(body);
-
+       UserRegisterDTO userRegisterDTO = UserRegisterDTO.from(body);
         
-        return authService.create(authService.from(body), )
-                .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> 
-                {
-                    if ()
-                })
-                .map(i -> new UserAuthenticationDTO(i.getUser()))
-                .map(tokenGenerator::generate)
-                .flatMap(Mono::justOrEmpty);
+       return userRepository.existsByUsername(userRegisterDTO.getUsername())
+            .filter(Boolean::booleanValue)
+            .map(b -> AuthenticationResponse.exception("USERNAME_EXISTS"))
+            .switchIfEmpty(
+                Mono.defer(() -> 
+                    authService.create(authService.from(body), userRegisterDTO)
+                        .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+                        .map(this::identityToToken)   
+                )
+            );
     }
 }

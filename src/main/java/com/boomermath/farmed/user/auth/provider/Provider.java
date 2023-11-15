@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-public interface AuthService<E> {
+public interface Provider<E> {
 
     E from(Map<String, String> attributes);
 

@@ -1,16 +1,19 @@
-package com.boomermath.farmed.user.auth.provider.google;
+package com.boomermath.farmed.user.auth.provider.email;
+
 
 import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
+
 
 @Introspected
 @Getter
 @AllArgsConstructor
-public class GoogleCodeDTO {
-    @NonNull
-    private final String code;
+public final class EmailDTO {
+    @Email
+    private final String email;
+    private final String password;
 }

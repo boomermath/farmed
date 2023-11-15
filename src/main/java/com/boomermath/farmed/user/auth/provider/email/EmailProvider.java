@@ -5,7 +5,7 @@ import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
-import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.auth.provider.Provider;
 import com.boomermath.farmed.user.data.User;
 import com.boomermath.farmed.user.data.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
@@ -21,18 +21,18 @@ import java.util.Map;
 @Singleton
 @Named("email")
 @RequiredArgsConstructor
-public class EmailAuthService implements AuthService<EmailAuthDTO> {
+public class EmailProvider implements Provider<EmailDTO> {
     private final UserRepository userRepository;
     private final IdentityRepository identityRepository;
     private final PasswordEncoder encoder;
 
     @Override
-    public EmailAuthDTO from(Map<String, String> attributes) {
-        return new EmailAuthDTO(attributes.get("email"), attributes.get("password"));
+    public EmailDTO from(Map<String, String> attributes) {
+        return new EmailDTO(attributes.get("email"), attributes.get("password"));
     }
 
     @Override
-    public Mono<Identity> authenticate(@Valid EmailAuthDTO data) {
+    public Mono<Identity> authenticate(@Valid EmailDTO data) {
         return userRepository.findByEmail(data.getEmail())
                 .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.USER_NOT_FOUND)))
                 .map(User::getIdentity)
@@ -41,7 +41,7 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
     }
 
     @Override
-    public Mono<Identity> create(@Valid EmailAuthDTO data, @Valid UserRegisterDTO registerDTO) {
+    public Mono<Identity> create(@Valid EmailDTO data, @Valid UserRegisterDTO registerDTO) {
         User newUser = User.builder()
                 .username(registerDTO.getUsername())
                 .email(data.getEmail())

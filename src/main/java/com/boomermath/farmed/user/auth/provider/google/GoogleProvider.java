@@ -4,7 +4,7 @@ import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
-import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.auth.provider.Provider;
 import com.boomermath.farmed.user.data.User;
 import com.boomermath.farmed.user.data.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
@@ -20,18 +20,18 @@ import java.util.Map;
 @Singleton
 @Named("google")
 @RequiredArgsConstructor
-public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
+public class GoogleProvider implements Provider<GoogleDTO> {
     private final GoogleClient googleClient;
     private final UserRepository userRepository;
     private final IdentityRepository identityRepository;
 
     @Override
-    public GoogleCodeDTO from(Map<String, String> attributes) {
-        return new GoogleCodeDTO(attributes.get("code"));
+    public GoogleDTO from(Map<String, String> attributes) {
+        return new GoogleDTO(attributes.get("code"));
     }
 
     @Override
-    public Mono<Identity> authenticate(GoogleCodeDTO data) {
+    public Mono<Identity> authenticate(@Valid GoogleDTO data) {
         return googleClient.fetchTokenResponse(data.getCode())
                 .flatMap(token -> identityRepository.findByHashAndIdentityType(token.getSubject(), IdentityType.GOOGLE))
                 .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)));
@@ -39,7 +39,7 @@ public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
 
 
     @Override
-    public Mono<Identity> create(@Valid GoogleCodeDTO data, @Valid UserRegisterDTO registerDTO) {
+    public Mono<Identity> create(@Valid GoogleDTO data, @Valid UserRegisterDTO registerDTO) {
         return googleClient.fetchTokenResponse(data.getCode())
                 .map(t -> Identity.builder()
                         .identityType(IdentityType.EMAIL)

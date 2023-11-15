@@ -11,6 +11,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserAuthenticationDTO implements Authentication {
     private final User user;
+    
     @Override
     public @NonNull Map<String, Object> getAttributes() {
         return Map.of(

@@ -3,7 +3,7 @@ package com.boomermath.farmed.user.auth.provider.apple;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
-import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.auth.provider.Provider;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.JWSKeySelector;
@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class AppleAuthService implements AuthService<AppleDTO> {
+public class AppleAuthService implements Provider<AppleDTO> {
     private final IdentityRepository identityRepository;
     private final AppleClient appleClient;
     //   @Value("${apple.client-id}")
