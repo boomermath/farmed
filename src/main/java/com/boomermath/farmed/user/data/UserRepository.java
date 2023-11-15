@@ -13,4 +13,6 @@ import java.util.UUID;
 public interface UserRepository extends ReactorCrudRepository<@Valid User, UUID> {
     @Join("identity")
     Mono<User> findByEmail(String email);
+
+    Mono<Boolean> existsByUsername(String username);
 }

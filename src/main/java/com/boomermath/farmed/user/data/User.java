@@ -2,6 +2,7 @@ package com.boomermath.farmed.user.data;
 
 import com.boomermath.farmed.user.auth.identity.Identity;
 import io.micronaut.data.annotation.*;
+import jakarta.validation.Constraint;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 

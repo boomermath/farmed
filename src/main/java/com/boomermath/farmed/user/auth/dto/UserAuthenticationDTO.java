@@ -1,4 +1,4 @@
-package com.boomermath.farmed.user.auth.provider;
+package com.boomermath.farmed.user.auth.dto;
 
 
 import com.boomermath.farmed.user.data.User;

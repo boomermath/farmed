@@ -1,5 +1,6 @@
 package com.boomermath.farmed.user.auth.provider.google;
 
+import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
@@ -10,6 +11,7 @@ import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +27,7 @@ public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
 
     @Override
     public GoogleCodeDTO from(Map<String, String> attributes) {
-        return new GoogleCodeDTO(attributes.get("code"), attributes.get("username"));
+        return new GoogleCodeDTO(attributes.get("code"));
     }
 
     @Override
@@ -37,14 +39,14 @@ public class GoogleAuthService implements AuthService<GoogleCodeDTO> {
 
 
     @Override
-    public Mono<Identity> create(GoogleCodeDTO data) {
+    public Mono<Identity> create(@Valid GoogleCodeDTO data, @Valid UserRegisterDTO registerDTO) {
         return googleClient.fetchTokenResponse(data.getCode())
                 .map(t -> Identity.builder()
                         .identityType(IdentityType.EMAIL)
                         .hash(t.getSubject())
                         .user(
                                 User.builder()
-                                        .username(data.getUsername())
+                                        .username(registerDTO.getUsername())
                                         .email(t.getEmail())
                                         .build()
                         )

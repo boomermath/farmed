@@ -1,6 +1,7 @@
 package com.boomermath.farmed.user.auth.provider.email;
 
 import com.boomermath.farmed.user.auth.crypto.PasswordEncoder;
+import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
@@ -13,7 +14,6 @@ import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -21,7 +21,6 @@ import java.util.Map;
 @Singleton
 @Named("email")
 @RequiredArgsConstructor
-@Slf4j
 public class EmailAuthService implements AuthService<EmailAuthDTO> {
     private final UserRepository userRepository;
     private final IdentityRepository identityRepository;
@@ -29,7 +28,7 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
 
     @Override
     public EmailAuthDTO from(Map<String, String> attributes) {
-        return new EmailAuthDTO(attributes.get("email"), attributes.get("password"), attributes.get("username"));
+        return new EmailAuthDTO(attributes.get("email"), attributes.get("password"));
     }
 
     @Override
@@ -42,9 +41,9 @@ public class EmailAuthService implements AuthService<EmailAuthDTO> {
     }
 
     @Override
-    public Mono<Identity> create(@Valid EmailAuthDTO data) {
+    public Mono<Identity> create(@Valid EmailAuthDTO data, @Valid UserRegisterDTO registerDTO) {
         User newUser = User.builder()
-                .username(data.getUsername())
+                .username(registerDTO.getUsername())
                 .email(data.getEmail())
                 .build();
 

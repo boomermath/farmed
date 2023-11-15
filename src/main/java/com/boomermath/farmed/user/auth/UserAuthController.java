@@ -1,4 +1,4 @@
-package com.boomermath.farmed.user.auth.provider;
+package com.boomermath.farmed.user.auth;
 
 
 import io.micronaut.http.annotation.Body;
@@ -16,11 +16,17 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+import com.boomermath.farmed.user.auth.dto.UserAuthenticationDTO;
+import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
+import com.boomermath.farmed.user.auth.provider.AuthService;
+import com.boomermath.farmed.user.data.UserRepository;
+
 @Controller("/user/auth")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @RequiredArgsConstructor
-public class UserAuthController<E extends UserRegisterDTO> {
+public class UserAuthController<E> {
     private final AccessRefreshTokenGenerator tokenGenerator;
+    private final UserRepository userRepository;
     private final Map<String, AuthService<E>> authServiceMap;
 
     private AuthService<E> getAuthService(String authMethod) {
@@ -35,8 +41,7 @@ public class UserAuthController<E extends UserRegisterDTO> {
     public Mono<AccessRefreshToken> login(@Body Map<String, String> body, @PathVariable String authMethod) {
         AuthService<E> authService = getAuthService(authMethod);
 
-        return Mono.just(authService.from(body))
-                .flatMap(authService::authenticate)
+        return authService.authenticate(authService.from(body))
                 .map(i -> new UserAuthenticationDTO(i.getUser()))
                 .map(tokenGenerator::generate)
                 .flatMap(Mono::justOrEmpty);
@@ -45,10 +50,15 @@ public class UserAuthController<E extends UserRegisterDTO> {
     @Post("/{authMethod}/register")
     public Mono<AccessRefreshToken> register(@Body Map<String, String> body, @PathVariable String authMethod) {
         AuthService<E> authService = getAuthService(authMethod);
+
+        UserRegisterDTO userRegisterDTO = UserRegisterDTO.from(body);
+
         
-        return Mono.just(authService.from(body))
-                .flatMap(authService::create)
-                .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+        return authService.create(authService.from(body), )
+                .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> 
+                {
+                    if ()
+                })
                 .map(i -> new UserAuthenticationDTO(i.getUser()))
                 .map(tokenGenerator::generate)
                 .flatMap(Mono::justOrEmpty);

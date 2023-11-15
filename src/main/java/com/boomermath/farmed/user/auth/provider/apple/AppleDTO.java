@@ -1,6 +1,7 @@
 package com.boomermath.farmed.user.auth.provider.apple;
 
-import com.boomermath.farmed.user.auth.provider.UserRegisterDTO;
+import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
+
 import io.micronaut.core.annotation.Introspected;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

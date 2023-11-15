@@ -36,8 +36,10 @@ public class Farm {
     private List<Review> reviews;
 
     @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "farm", cascade = Relation.Cascade.ALL)
+    @Nullable
     private Contact contact;
 
     @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "farm", cascade = Relation.Cascade.ALL)
+    @Nullable
     private List<DailySchedule> schedule;
 }

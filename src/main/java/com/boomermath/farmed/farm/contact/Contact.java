@@ -25,6 +25,7 @@ public class Contact {
     private String email;
     private String website;
 
+    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "contact", cascade = Relation.Cascade.ALL)
     private Farm farm;
 
     @Relation(value = Relation.Kind.ONE_TO_MANY, mappedBy = "contact", cascade = Relation.Cascade.ALL)
