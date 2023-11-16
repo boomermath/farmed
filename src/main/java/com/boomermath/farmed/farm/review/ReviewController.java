@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.farm.FarmRepository;
-import com.boomermath.farmed.user.data.User;
+import com.boomermath.farmed.user.User;
 
 @Controller("/farm/{farmId}")
 @Secured(SecurityRule.IS_AUTHENTICATED)
@@ -35,18 +35,16 @@ public class ReviewController {
     @Post("/reviews")
     public Mono<ReviewDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
             @Body ReviewRequestDTO reviewDTO) {
-        return farmRepository.existsById(farmId)
-                .filter(b -> b.booleanValue())
-                .flatMap(b -> Mono.defer(() -> {
+        return farmRepository.findById(farmId)
+                .flatMap(f -> Mono.defer(() -> {
                     UUID userId = (UUID) authentication.getAttributes().get("id");
                     String username = authentication.getName();
             
                     Review review = reviewMapper.toEntity(reviewDTO);
             
-                    Farm farm = Farm.builder().id(farmId).build();
                     User user = User.builder().id(userId).username(username).build();
             
-                    review.setFarm(farm);
+                    review.setFarm(f);
                     review.setUser(user);
 
                     return reviewRepository.save(review)

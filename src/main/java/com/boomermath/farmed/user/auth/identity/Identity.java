@@ -1,6 +1,6 @@
 package com.boomermath.farmed.user.auth.identity;
 
-import com.boomermath.farmed.user.data.User;
+import com.boomermath.farmed.user.User;
 import io.micronaut.data.annotation.*;
 import lombok.*;
 
@@ -11,6 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Identity {
@@ -25,6 +26,7 @@ public class Identity {
     @NonNull
     private String hash;
 
+    @ToString.Exclude
     private User user;
 
     @DateCreated

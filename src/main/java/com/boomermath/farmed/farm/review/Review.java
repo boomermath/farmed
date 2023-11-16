@@ -1,11 +1,9 @@
 package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.farm.Farm;
-import com.boomermath.farmed.user.data.User;
+import com.boomermath.farmed.user.User;
 
-import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.*;
-import io.micronaut.serde.annotation.Serdeable;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

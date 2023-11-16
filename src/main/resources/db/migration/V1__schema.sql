@@ -1,11 +1,13 @@
-create table farmed_user
+create table "user"
 (
     id          uuid    not null primary key,
-    email       varchar not null unique,
-    username    varchar not null unique,
+    email       varchar not null,
+    username    varchar not null,
     created_at  date    not null,
     identity_id uuid not null unique
 );
+
+alter table "user" add unique (email, username);
 
 create type identity_type as enum ('email', 'google', 'apple');
 
@@ -16,9 +18,9 @@ create table farmed_user_identity
     hash          varchar       not null,
     created_at    date          not null,
     updated_at    date          not null,
-    user_id       uuid          not null unique references farmed_user (id)
+    user_id       uuid          not null unique references "user" (id)
 );
 
-alter table farmed_user add constraint fk_farmed_user_identity
+alter table "user" add constraint fk_farmed_user_identity
     foreign key (identity_id) references farmed_user_identity(id)
 on delete cascade;

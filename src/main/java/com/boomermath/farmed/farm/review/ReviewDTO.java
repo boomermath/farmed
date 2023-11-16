@@ -1,13 +1,10 @@
 package com.boomermath.farmed.farm.review;
 
-import com.boomermath.farmed.user.data.User;
-import com.boomermath.farmed.user.data.UserDTO;
+import com.boomermath.farmed.user.UserDTO;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

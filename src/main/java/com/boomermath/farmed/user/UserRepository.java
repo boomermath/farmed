@@ -1,4 +1,4 @@
-package com.boomermath.farmed.user.data;
+package com.boomermath.farmed.user;
 
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.model.query.builder.sql.Dialect;

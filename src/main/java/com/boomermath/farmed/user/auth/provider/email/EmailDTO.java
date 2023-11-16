@@ -1,8 +1,6 @@
 package com.boomermath.farmed.user.auth.provider.email;
 
 
-import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
-
 import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;

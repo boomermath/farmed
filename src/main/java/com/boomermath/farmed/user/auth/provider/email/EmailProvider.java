@@ -3,12 +3,12 @@ package com.boomermath.farmed.user.auth.provider.email;
 import com.boomermath.farmed.user.auth.crypto.PasswordEncoder;
 import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
-import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.Provider;
-import com.boomermath.farmed.user.data.User;
-import com.boomermath.farmed.user.data.UserRepository;
+import com.boomermath.farmed.user.User;
+import com.boomermath.farmed.user.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
+import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
@@ -23,12 +23,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class EmailProvider implements Provider<EmailDTO> {
     private final UserRepository userRepository;
-    private final IdentityRepository identityRepository;
     private final PasswordEncoder encoder;
 
     @Override
     public EmailDTO from(Map<String, String> attributes) {
-        return new EmailDTO(attributes.get("email"), attributes.get("password"));
+        return new EmailDTO(attributes.get("email"),  attributes.get("password"));
     }
 
     @Override
@@ -41,9 +40,8 @@ public class EmailProvider implements Provider<EmailDTO> {
     }
 
     @Override
-    public Mono<Identity> create(@Valid EmailDTO data, @Valid UserRegisterDTO registerDTO) {
+    public Mono<Identity> create(@Valid EmailDTO data) {
         User newUser = User.builder()
-                .username(registerDTO.getUsername())
                 .email(data.getEmail())
                 .build();
 
@@ -53,7 +51,6 @@ public class EmailProvider implements Provider<EmailDTO> {
                 .user(newUser)
                 .build();
 
-        return userRepository.save(newUser)
-                .flatMap(u -> identityRepository.save(newUserLogin));
+        return Mono.just(newUserLogin);
     }
 }

@@ -1,7 +1,7 @@
 package com.boomermath.farmed.user.auth.dto;
 
 
-import com.boomermath.farmed.user.data.User;
+import com.boomermath.farmed.user.User;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.security.authentication.Authentication;
 import lombok.RequiredArgsConstructor;

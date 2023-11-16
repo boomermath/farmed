@@ -5,8 +5,8 @@ import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.Provider;
-import com.boomermath.farmed.user.data.User;
-import com.boomermath.farmed.user.data.UserRepository;
+import com.boomermath.farmed.user.User;
+import com.boomermath.farmed.user.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Named;
@@ -39,21 +39,16 @@ public class GoogleProvider implements Provider<GoogleDTO> {
 
 
     @Override
-    public Mono<Identity> create(@Valid GoogleDTO data, @Valid UserRegisterDTO registerDTO) {
+    public Mono<Identity> create(@Valid GoogleDTO data) {
         return googleClient.fetchTokenResponse(data.getCode())
                 .map(t -> Identity.builder()
                         .identityType(IdentityType.EMAIL)
                         .hash(t.getSubject())
                         .user(
                                 User.builder()
-                                        .username(registerDTO.getUsername())
                                         .email(t.getEmail())
                                         .build()
                         )
-                        .build())
-                .flatMap(i ->
-                        userRepository.save(i.getUser())
-                                .flatMap(u -> identityRepository.save(i))
-                );
+                        .build());
     }
 }

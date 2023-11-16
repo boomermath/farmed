@@ -1,4 +1,4 @@
-package com.boomermath.farmed.user.data;
+package com.boomermath.farmed.user;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
