@@ -1,12 +1,10 @@
 package com.boomermath.farmed.user.auth.provider.google;
 
-import com.boomermath.farmed.user.auth.dto.UserRegisterDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.Provider;
 import com.boomermath.farmed.user.User;
-import com.boomermath.farmed.user.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Named;
@@ -22,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GoogleProvider implements Provider<GoogleDTO> {
     private final GoogleClient googleClient;
-    private final UserRepository userRepository;
     private final IdentityRepository identityRepository;
 
     @Override

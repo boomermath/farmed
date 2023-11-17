@@ -2,6 +2,7 @@ package com.boomermath.farmed.user.auth.identity;
 
 import com.boomermath.farmed.user.User;
 import io.micronaut.data.annotation.*;
+import io.micronaut.data.annotation.sql.JoinColumn;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,16 +18,17 @@ import java.util.UUID;
 public class Identity {
     @Id
     @AutoPopulated
+    @MappedProperty()
     private UUID id;
 
     @NonNull
-    @MappedProperty(value = "identity_type", alias = "identityType")
     private IdentityType identityType;
 
     @NonNull
     private String hash;
 
     @ToString.Exclude
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @DateCreated

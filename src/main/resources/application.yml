@@ -26,9 +26,10 @@ flyway:
   datasources:
     default:
       enabled: true
-      baseline-on-migrate: false
+      baseline-on-migrate: true
 datasources:
   default:
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/farmed
     username: boomermath
     password: DAONE364
@@ -38,4 +39,3 @@ r2dbc:
       url: r2dbc:postgresql://localhost:5432/farmed
       username: boomermath
       password: DAONE364
-      schema-generate: create_drop

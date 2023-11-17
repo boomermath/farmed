@@ -11,8 +11,9 @@ import java.util.UUID;
 
 @R2dbcRepository(dialect = Dialect.POSTGRES)
 public interface UserRepository extends ReactorCrudRepository<@Valid User, UUID> {
+    
     @Join("identity")
-    Mono<User> findByEmail(String email);
+    Mono<UserAuthDTO> findByEmail(String email);
 
     Mono<Boolean> existsByUsername(String username);
 }

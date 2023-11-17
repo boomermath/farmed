@@ -13,7 +13,7 @@ alter table farmed_user
 
 create type identity_type as enum ('email', 'google', 'apple');
 create type social_type as enum ('facebook', 'instagram', 'twitter');
-create type day_of_week as enum ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'all');
+create type day_of_week as enum ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
 
 create table identity
 (
@@ -43,7 +43,7 @@ alter table daily_schedule add unique (day_of_week, farm_id);
 
 create table contact
 (
-    farm_id           uuid    not null primary key references farm(id),
+    id           uuid    not null primary key references farm(id),
     phone_number varchar not null,
     email        varchar not null
 );

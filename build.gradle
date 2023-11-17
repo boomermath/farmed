@@ -1,9 +1,8 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.1.2"
-    id("io.micronaut.test-resources") version "4.1.2"
-    id("io.micronaut.aot") version "4.1.2"
-    id("io.freefair.lombok") version "8.4"
+    id("io.micronaut.application") version "4.2.0"
+    id("io.micronaut.test-resources") version "4.2.0"
+    id("io.micronaut.aot") version "4.2.0"
 }
 
 version = "0.1"
@@ -20,6 +19,9 @@ dependencies {
     runtimeOnly("org.yaml:snakeyaml")
     runtimeOnly("ch.qos.logback:logback-classic")
 
+    compileOnly("org.projectlombok:lombok:1.18.30")
+	annotationProcessor("org.projectlombok:lombok:1.18.30")
+
     annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
@@ -31,10 +33,13 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
     implementation("io.micronaut:micronaut-http-client")
+    
+    testCompileOnly("org.projectlombok:lombok:1.18.30")
+	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("io.micronaut:micronaut-http-client")
 
+    runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.postgresql:r2dbc-postgresql")
-    //runtimeOnly("io.r2dbc:r2dbc-h2")
     testResourcesService("org.postgresql:postgresql")
 
     aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")

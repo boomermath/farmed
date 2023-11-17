@@ -6,6 +6,7 @@ import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.Provider;
 import com.boomermath.farmed.user.User;
+import com.boomermath.farmed.user.UserAuthDTO;
 import com.boomermath.farmed.user.UserRepository;
 import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationProvider;
@@ -34,7 +35,7 @@ public class EmailProvider implements Provider<EmailDTO> {
     public Mono<Identity> authenticate(@Valid EmailDTO data) {
         return userRepository.findByEmail(data.getEmail())
                 .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.USER_NOT_FOUND)))
-                .map(User::getIdentity)
+                .map(UserAuthDTO::getIdentity)
                 .filter(i -> encoder.matches(data.getPassword(), i.getHash()))
                 .switchIfEmpty(Mono.error(AuthenticationResponse.exception(AuthenticationFailureReason.CREDENTIALS_DO_NOT_MATCH)));
     }

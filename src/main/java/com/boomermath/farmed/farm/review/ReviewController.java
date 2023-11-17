@@ -8,6 +8,7 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import io.r2dbc.spi.R2dbcDataIntegrityViolationException;
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class ReviewController {
     private final ReviewMapper reviewMapper;
 
     @Get("/reviews")
-    public Mono<Page<Review>> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
+    public Flux<Review> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
             @QueryValue Optional<Integer> size) {
         return reviewRepository.findByFarmIdOrderByUpdatedAtDesc(farmId,
                 Pageable.from(page.orElse(0), size.orElse(10)));
