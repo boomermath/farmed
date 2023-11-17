@@ -1,24 +1,22 @@
 package com.boomermath.farmed.farm.contact;
 
-import io.micronaut.data.annotation.AutoPopulated;
+import com.boomermath.farmed.farm.Farm;
+import com.boomermath.farmed.farm.contact.social.Social;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.Relation;
+import io.micronaut.data.annotation.sql.JoinColumn;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.boomermath.farmed.farm.Farm;
-import com.boomermath.farmed.farm.contact.social.Social;
-
 @MappedEntity
 @Getter
 @Setter
 public class Contact {
     @Id
-    @AutoPopulated
     private UUID id;
 
     private String phoneNumber;

@@ -19,7 +19,6 @@ import com.boomermath.farmed.farm.review.Review;
 import com.boomermath.farmed.farm.schedule.DailySchedule;
 
 @MappedEntity
-@Serdeable
 @Builder
 @Getter
 @Setter

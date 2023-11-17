@@ -17,12 +17,9 @@ public interface ReviewRepository extends ReactorPageableRepository<Review, UUID
 
     @Join("user")
     Mono<Page<Review>> findByFarmIdOrderByUpdatedAtDesc(UUID farmId, Pageable pageable);
-    
-    Mono<Boolean> existsByUserId(UUID userId);
-    
-    @Query("UPDATE review SET stars=:newRev.stars, text=:newRev.text WHERE id=:reviewId AND user_id=:userId AND farm_id=:farmId")
-    Mono<Review> updateOne(@Id UUID reviewId, UUID farmId, UUID userId, ReviewRequestDTO newRev);
+    @Query("UPDATE review SET stars=:rev.stars, text=:rev.text WHERE id=:rev.reviewId AND user_id=:rev.userId AND farm_id=:rev.farmId")
+    Mono<Review> updateOne(ReviewRequestDTO rev);
 
-    @Query("DELETE FROM Review WHERE id=:reviewId AND user_id=:userId AND farm_id=:farmId")
-    Mono<Long> deleteOne(@Id UUID reviewId, UUID farmId, UUID userId);
+    @Query("DELETE FROM review WHERE id=:reviewId AND user_id=:userId")
+    Mono<Long> deleteOne(@Id UUID reviewId, UUID userId);
 }

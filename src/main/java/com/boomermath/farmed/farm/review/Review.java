@@ -2,9 +2,8 @@ package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.user.User;
-
 import io.micronaut.data.annotation.*;
-import jakarta.annotation.Nullable;
+import io.micronaut.data.annotation.sql.JoinColumn;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Builder;
@@ -36,7 +35,5 @@ public class Review {
     private LocalDateTime updatedAt;
 
     private User user;
-
-    @Nullable
     private Farm farm;
 }

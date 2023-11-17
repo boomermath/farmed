@@ -38,18 +38,15 @@ public class ReviewController {
         return farmRepository.findById(farmId)
                 .flatMap(f -> Mono.defer(() -> {
                     UUID userId = (UUID) authentication.getAttributes().get("id");
-                    String username = authentication.getName();
-            
-                    Review review = reviewMapper.toEntity(reviewDTO);
-            
-                    User user = User.builder().id(userId).username(username).build();
-            
-                    review.setFarm(f);
-                    review.setUser(user);
 
-                    return reviewRepository.save(review)
+                    ReviewRequestDTO reviewRequestDTO = reviewDTO.toBuilder()
+                            .farmId(farmId)
+                            .userId(userId)
+                            .build();
+
+                    return reviewRepository.save(reviewMapper.toEntity(reviewRequestDTO))
                         .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> new Exception("REVIEW_EXISTS"))
-                        .map(reviewMapper::toDTO);
+                            .map(reviewMapper::toDTO);
                 }))
                 .switchIfEmpty(Mono.error(new Exception("INVALID_FARM")));
 
@@ -57,10 +54,15 @@ public class ReviewController {
 
     @Post("/reviews/{reviewId}")
     public Mono<Review> updateReview(Authentication authentication, @Body ReviewRequestDTO reviewDTO,
-            @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
+            @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID requestedReviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
-        return reviewRepository.updateOne(reviewId, farmId, userId, reviewDTO);
+        ReviewRequestDTO reviewRequestDTO = reviewDTO.toBuilder()
+                .farmId(farmId)
+                .userId(userId)
+                .build();
+
+        return reviewRepository.updateOne(reviewRequestDTO);
     }
 
     @Delete("/reviews/{reviewId}")
@@ -68,6 +70,6 @@ public class ReviewController {
             @PathVariable("reviewId") UUID reviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
-        return reviewRepository.deleteOne(reviewId, farmId, userId);
+        return reviewRepository.deleteOne(reviewId, userId);
     }
 }

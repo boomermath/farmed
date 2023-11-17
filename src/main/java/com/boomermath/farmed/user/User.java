@@ -10,10 +10,10 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@MappedEntity
+@MappedEntity("farmed_user")
 @Getter
 @Setter
-@Builder(toBuilder = true)
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
