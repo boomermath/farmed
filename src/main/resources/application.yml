@@ -22,20 +22,32 @@ micronaut:
     endpoints:
       login:
         enabled: false
-flyway:
-  datasources:
-    default:
-      enabled: true
-      baseline-on-migrate: true
-datasources:
+jpa:
   default:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/farmed
-    username: boomermath
-    password: DAONE364
-r2dbc:
-  datasources:
-    default:
-      url: r2dbc:postgresql://localhost:5432/farmed
-      username: boomermath
-      password: DAONE364
+    reactive: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          #auto: create-drop
+        show_sql: true
+        connection:
+          url: jdbc:postgresql://localhost:5432/farmed
+          username: boomermath
+          password: DAONE364
+#flyway:
+#  datasources:
+#    default:
+#      enabled: true
+#      baseline-on-migrate: true
+#datasources:
+#  default:
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/farmed
+#    username: boomermath
+#    password: DAONE364
+#r2dbc:
+#  datasources:
+#    default:
+#      url: r2dbc:postgresql://localhost:5432/farmed
+#      username: boomermath
+#      password: DAONE364

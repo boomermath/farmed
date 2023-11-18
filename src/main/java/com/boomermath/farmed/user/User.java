@@ -1,16 +1,15 @@
 package com.boomermath.farmed.user;
 
 import com.boomermath.farmed.user.auth.identity.Identity;
-import io.micronaut.data.annotation.*;
-import jakarta.validation.Constraint;
+import io.micronaut.data.annotation.DateCreated;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@MappedEntity("farmed_user")
+@Entity(name = "farmed_user")
 @Getter
 @Setter
 @Builder
@@ -19,19 +18,21 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
     @Id
-    @AutoPopulated
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NonNull
     @Email(message = "INVALID_EMAIL")
+    @Column(unique = true)
     private String email;
-    
+
+    @Column(unique = true)
     private String username;
 
     @DateCreated
     private LocalDateTime createdAt;
 
     @ToString.Exclude
-    @Relation(value = Relation.Kind.ONE_TO_ONE, mappedBy = "user", cascade = Relation.Cascade.ALL)
+    @OneToOne(mappedBy = "user")
     private Identity identity;
 }

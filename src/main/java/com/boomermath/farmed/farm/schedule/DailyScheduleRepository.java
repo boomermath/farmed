@@ -1,10 +1,10 @@
 package com.boomermath.farmed.farm.schedule;
 
-import java.util.UUID;
-
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.data.repository.reactive.ReactorCrudRepository;
 
+import java.util.UUID;
+
 @Repository
 public interface DailyScheduleRepository extends ReactorCrudRepository<DailySchedule, UUID> {
-    }
+}

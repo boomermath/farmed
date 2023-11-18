@@ -1,14 +1,15 @@
 package com.boomermath.farmed.user.auth.identity;
 
 import com.boomermath.farmed.user.User;
-import io.micronaut.data.annotation.*;
-import io.micronaut.data.annotation.sql.JoinColumn;
+import io.micronaut.data.annotation.DateCreated;
+import io.micronaut.data.annotation.DateUpdated;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@MappedEntity
+@Entity
 @Getter
 @Setter
 @Builder
@@ -17,8 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Identity {
     @Id
-    @AutoPopulated
-    @MappedProperty()
+    @Column(name = "user_id")
     private UUID id;
 
     @NonNull
@@ -28,14 +28,13 @@ public class Identity {
     private String hash;
 
     @ToString.Exclude
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @MapsId
+    @OneToOne
     private User user;
 
     @DateCreated
-    @MappedProperty(value = "created_at", alias = "createdAt")
     private LocalDateTime createdAt;
 
     @DateUpdated
-    @MappedProperty(value = "updated_at", alias = "updatedAt")
     private LocalDateTime updatedAt;
 }

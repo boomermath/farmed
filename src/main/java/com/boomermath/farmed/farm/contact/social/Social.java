@@ -1,29 +1,28 @@
 package com.boomermath.farmed.farm.contact.social;
 
-import io.micronaut.data.annotation.AutoPopulated;
-import io.micronaut.data.annotation.Id;
-import io.micronaut.data.annotation.MappedEntity;
+import com.boomermath.farmed.farm.contact.Contact;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
-import com.boomermath.farmed.farm.contact.Contact;
-
-@MappedEntity
+@Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Social {
     @Id
-    @AutoPopulated
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true)
     private SocialType socialType;
     private String socialInfo;
 
+    @ManyToOne
     private Contact contact;
-
-    public String getUrl() {
-        return SocialUrlResolver.urlFromInfo(socialType, socialInfo);
-    }
 }

@@ -1,11 +1,11 @@
 package com.boomermath.farmed.user.auth.dto;
 
-import java.util.Map;
-
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Map;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

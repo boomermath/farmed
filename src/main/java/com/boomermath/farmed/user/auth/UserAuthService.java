@@ -9,7 +9,6 @@ import com.boomermath.farmed.user.auth.provider.Provider;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.token.generator.AccessRefreshTokenGenerator;
 import io.micronaut.security.token.render.AccessRefreshToken;
-import io.r2dbc.spi.R2dbcDataIntegrityViolationException;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -49,7 +49,7 @@ public class UserAuthService<E> {
                                     return i;
                                 })
                                 .flatMap(i -> Mono.zip(userRepository.save(i.getUser()), identityRepository.save(i)))
-                                .onErrorMap(R2dbcDataIntegrityViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
                                 .map(Tuple2::getT1);
                     });
         } else {

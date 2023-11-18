@@ -11,5 +11,6 @@ public interface Provider<E> {
     E from(Map<String, String> attributes);
 
     Mono<Identity> authenticate(E data);
+
     Mono<Identity> create(E data);
 }

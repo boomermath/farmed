@@ -1,10 +1,10 @@
 package com.boomermath.farmed.farm.schedule;
 
-import java.time.LocalTime;
-
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;
+
+import java.time.LocalTime;
 
 @Serdeable
 @Introspected

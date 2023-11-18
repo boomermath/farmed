@@ -2,7 +2,6 @@ package com.boomermath.farmed.user.auth.provider.apple;
 
 import com.boomermath.farmed.user.auth.identity.Identity;
 import com.boomermath.farmed.user.auth.identity.IdentityRepository;
-import com.boomermath.farmed.user.auth.identity.IdentityType;
 import com.boomermath.farmed.user.auth.provider.Provider;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -29,7 +28,7 @@ public class AppleAuthService implements Provider<AppleDTO> {
     private final AppleClient appleClient;
     //   @Value("${apple.client-id}")
     private final String clientId;
-//    @Value("${apple.client-secret}")
+    //    @Value("${apple.client-secret}")
     private final String clientSecret;
 
     private Mono<AppleTokenData> verifyToken(AppleTokenResponse appleTokenResponse) {

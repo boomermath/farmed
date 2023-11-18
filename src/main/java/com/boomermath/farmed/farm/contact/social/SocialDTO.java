@@ -2,7 +2,6 @@ package com.boomermath.farmed.farm.contact.social;
 
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
-import lombok.Data;
 import lombok.Getter;
 
 @Serdeable

@@ -8,6 +8,7 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.token.render.AccessRefreshToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -15,9 +16,9 @@ import java.util.Map;
 @Controller("/user/auth")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @RequiredArgsConstructor
+@Slf4j
 public class UserAuthController<E> {
     private final UserAuthService<E> userAuthService;
-
 
     @Post("/{authMethod}/login")
     public Mono<AccessRefreshToken> login(@Body Map<String, String> body, @PathVariable String authMethod) {

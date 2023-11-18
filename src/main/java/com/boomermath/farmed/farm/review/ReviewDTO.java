@@ -1,7 +1,6 @@
 package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.user.UserDTO;
-
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;

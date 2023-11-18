@@ -1,9 +1,7 @@
 package com.boomermath.farmed.farm.contact;
 
 import com.boomermath.farmed.farm.contact.social.SocialDTO;
-
 import io.micronaut.core.annotation.Introspected;
-
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;
 

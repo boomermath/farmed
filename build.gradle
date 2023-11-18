@@ -26,9 +26,19 @@ dependencies {
     annotationProcessor("io.micronaut.data:micronaut-data-processor")
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
-    implementation("io.micronaut.data:micronaut-data-r2dbc:4.2.0")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
-    implementation("io.micronaut.flyway:micronaut-flyway")
+
+    implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
+    implementation("io.vertx:vertx-pg-client")
+    implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("com.ongres.scram:client:2.1")
+
+//    implementation("io.micronaut.data:micronaut-data-r2dbc:4.2.0")
+//    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+//    implementation("io.micronaut.flyway:micronaut-flyway")
+//    runtimeOnly("org.postgresql:postgresql")
+//    runtimeOnly("org.postgresql:r2dbc-postgresql")
+//    testResourcesService("org.postgresql:postgresql")
+
     implementation("io.micronaut.security:micronaut-security-jwt")
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.validation:micronaut-validation")
@@ -38,9 +48,7 @@ dependencies {
 	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("io.micronaut:micronaut-http-client")
 
-    runtimeOnly("org.postgresql:postgresql")
-    runtimeOnly("org.postgresql:r2dbc-postgresql")
-    testResourcesService("org.postgresql:postgresql")
+
 
     aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")
     aotPlugins("io.micronaut.security:micronaut-security-aot")
@@ -55,7 +63,7 @@ java {
 
 graalvmNative.toolchainDetection = false
 micronaut {
-    runtime("jetty")
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
