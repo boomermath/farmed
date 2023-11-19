@@ -18,10 +18,9 @@ import java.util.UUID;
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @RequiredArgsConstructor
 public class ReviewController {
-    private final FarmRepository farmRepository;
     private final ReviewRepository reviewRepository;
+    private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
-
     @Get("/reviews")
     public Flux<Review> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
                                    @QueryValue Optional<Integer> size) {
@@ -32,25 +31,18 @@ public class ReviewController {
     @Post("/reviews")
     public Mono<ReviewDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
                                       @Body ReviewRequestDTO reviewDTO) {
-        return farmRepository.findById(farmId)
-                .flatMap(f -> Mono.defer(() -> {
-                    UUID userId = (UUID) authentication.getAttributes().get("id");
+        UUID userId = (UUID) authentication.getAttributes().get("id");
 
-                    ReviewId reviewId = ReviewId.builder()
-                            .farmId(farmId)
-                            .userId(userId)
-                            .build();
+        ReviewId reviewId = ReviewId.builder()
+                .farmId(farmId)
+                .userId(userId)
+                .build();
 
-                    return reviewRepository.save(reviewMapper.toEntity(reviewId, reviewDTO))
-                            .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> new Exception("REVIEW_EXISTS"))
-                            .map(reviewMapper::toDTO);
-                }))
-                .switchIfEmpty(Mono.error(new Exception("INVALID_FARM")));
-
+        return reviewService.createReview(reviewMapper.toEntity(reviewId, reviewDTO));
     }
 
     @Post("/reviews/{reviewId}")
-    public Mono<Review> updateReview(Authentication authentication, @Body ReviewRequestDTO reviewDTO,
+    public Mono<ReviewDTO> updateReview(Authentication authentication, @Body ReviewRequestDTO reviewDTO,
                                      @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID requestedReviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 
@@ -60,7 +52,7 @@ public class ReviewController {
                 .userId(userId)
                 .build();
 
-        return reviewRepository.updateOne(reviewId, reviewDTO);
+        return reviewService.updateReview(reviewMapper.toEntity(reviewId, reviewDTO));
     }
 
     @Delete("/reviews/{reviewId}")
@@ -74,6 +66,6 @@ public class ReviewController {
                 .userId(userId)
                 .build();
 
-        return reviewRepository.deleteById(reviewId);
+        return reviewService.deleteReview(reviewId);
     }
 }

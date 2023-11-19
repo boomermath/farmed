@@ -5,6 +5,7 @@ import com.boomermath.farmed.farm.review.Review;
 import com.boomermath.farmed.farm.schedule.DailySchedule;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +24,9 @@ public class Farm {
 
     @NonNull
     private String name;
+
+    private int rating;
+    private int reviewCount;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "farm")

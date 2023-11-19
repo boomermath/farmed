@@ -16,8 +16,10 @@ public interface FarmRepository extends ReactorCrudRepository<Farm, UUID>, React
 
     Mono<Farm> findByName(String name);
 
+
+
     default Mono<Farm> findById(@Id UUID id, boolean contact, boolean schedule) {
-        PredicateSpecification<Farm> joinSpec = (root, criteriaBuilder) -> {
+        QuerySpecification<Farm> joinSpec = (root, query, criteriaBuilder) -> {
 //            if (contact) {
 //                root.fetch("contact");
 //            }
