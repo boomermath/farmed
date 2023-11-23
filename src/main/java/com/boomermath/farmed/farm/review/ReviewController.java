@@ -1,6 +1,5 @@
 package com.boomermath.farmed.farm.review;
 
-import com.boomermath.farmed.farm.FarmRepository;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -56,7 +54,7 @@ public class ReviewController {
     }
 
     @Delete("/reviews/{reviewId}")
-    public Mono<Long> deleteReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
+    public Mono<Void> deleteReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
                                    @PathVariable("reviewId") UUID requestedReviewId) {
         UUID userId = (UUID) authentication.getAttributes().get("id");
 

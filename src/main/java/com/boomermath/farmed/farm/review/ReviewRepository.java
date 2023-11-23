@@ -17,6 +17,10 @@ public interface ReviewRepository extends ReactorPageableRepository<Review, Revi
     @Join("user")
     Flux<Review> findByFarmIdOrderByUpdatedAtDesc(UUID farmId, Pageable pageable);
 
-    @Query("UPDATE Review SET stars=:rev.stars, text=:rev.text WHERE id=:compositeId.id AND user_id=:compositeId.userId AND farm_id=:compositeId.farmId")
-    Mono<Review> updateOne(@Id ReviewId compositeId, ReviewRequestDTO rev);
+    @Join("farm")
+    Mono<Review> findById(ReviewId id);
+
+    @Join("farm")
+    @Query("delete from review r where id=:id inner join Farm f on r.id.farmId=f.id")
+    Mono<Review> delete(@Id ReviewId id);
 }

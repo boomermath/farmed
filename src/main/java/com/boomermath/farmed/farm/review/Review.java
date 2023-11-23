@@ -39,7 +39,7 @@ public class Review {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "farm_id", insertable = false, updatable = false)
     private Farm farm;
 }

@@ -5,7 +5,6 @@ import com.boomermath.farmed.farm.FarmRepository;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
 @Singleton
 @RequiredArgsConstructor
@@ -16,42 +15,55 @@ public class ReviewService {
 
     public Mono<ReviewDTO> createReview(Review review) {
         return farmRepository.findById(review.getId().getFarmId())
-                .flatMap(f -> {
+                .map(f -> {
                     int currentReviewCount = f.getReviewCount();
 
                     f.setRating(
-                            ((f.getRating() * currentReviewCount) + review.getStars()) / (currentReviewCount + 1)
-                    );
+                            ((f.getRating() * currentReviewCount) + review.getStars()) / (currentReviewCount + 1));
                     f.setReviewCount(currentReviewCount + 1);
+                    review.setFarm(f);
 
-                    return Mono.zip(farmRepository.save(f), reviewRepository.save(review));
+                    return review;
                 })
-                .map(Tuple2::getT2)
+                .flatMap(reviewRepository::save)
                 .map(reviewMapper::toDTO);
     }
 
     public Mono<ReviewDTO> updateReview(Review review) {
-        return Mono.zip(farmRepository.findById(review.getId().getFarmId()), reviewRepository.findById(review.getId()))
-                .map(t -> {
-                    Farm f = t.getT1();
-                    Review r = t.getT2();
+        return reviewRepository.findById(review.getId())
+                .switchIfEmpty(Mono.error(new Exception("INVALID_REVIEW")))
+                .map(r -> {
+                    Farm f = r.getFarm();
 
                     int currentReviewCount = f.getReviewCount();
 
                     f.setRating(
-                            ((f.getRating() * currentReviewCount) - r.getStars() + review.getStars()) / (currentReviewCount + 1)
-                    );
+                            ((f.getRating() * currentReviewCount) - r.getStars() + review.getStars())
+                                    / (currentReviewCount + 1));
                     f.setReviewCount(currentReviewCount + 1);
 
-                    return t;
-                }).flatMap(
-                        t -> Mono.zip(farmRepository.save(t.getT1()), reviewRepository.update(review))
-                )
-                .map(Tuple2::getT2)
+                    return r;
+                })
+                .flatMap(reviewRepository::save)
                 .map(reviewMapper::toDTO);
     }
 
-    public Mono<Long> deleteReview(ReviewId reviewId) {
+    public Mono<Void> deleteReview(ReviewId reviewId) {
+        return reviewRepository.delete(reviewId)
+        .switchIfEmpty(Mono.error(new Exception("INVALID_REVIEW")))
+        .map(r -> {
+            Farm f = r.getFarm();
 
+            int currentReviewCount = f.getReviewCount();
+
+            f.setRating(
+                    ((f.getRating() * currentReviewCount) - r.getStars())
+                            / (currentReviewCount - 1));
+            f.setReviewCount(currentReviewCount - 1);
+
+            return f;
+        })
+        .flatMap(farmRepository::save)
+        .then();
     }
 }

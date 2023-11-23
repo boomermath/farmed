@@ -46,11 +46,11 @@ public class UserAuthService<E> {
                         return provider.create(provider.from(attributes))
                                 .map(i -> {
                                     i.getUser().setUsername(username);
+                                    i.getUser().setIdentity(i);
                                     return i;
                                 })
-                                .flatMap(i -> Mono.zip(userRepository.save(i.getUser()), identityRepository.save(i)))
-                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
-                                .map(Tuple2::getT1);
+                                .flatMap(i -> userRepository.save(i.getUser()))
+                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"));
                     });
         } else {
             userMono = provider.authenticate(provider.from(attributes))
