@@ -18,7 +18,7 @@ public class FarmedSeedingBean {
         .name("Union")
         .build();
 
-        farmRepository.save(farm).block();
+      //  farmRepository.save(farm).block();
 
     }
 }

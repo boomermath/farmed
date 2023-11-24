@@ -30,6 +30,7 @@ dependencies {
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
+    annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.0.Final")
     implementation("io.vertx:vertx-pg-client")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("com.ongres.scram:client:2.1")

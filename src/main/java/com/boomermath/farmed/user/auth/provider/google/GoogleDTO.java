@@ -11,5 +11,5 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class GoogleDTO {
     @NonNull
-    private final String code;
+    private final String idToken;
 }

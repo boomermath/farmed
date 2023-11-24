@@ -25,7 +25,7 @@ public class EmailProvider implements Provider<EmailDTO> {
 
     @Override
     public EmailDTO from(Map<String, String> attributes) {
-        return new EmailDTO(attributes.get("email"), attributes.get("password"));
+        return new EmailDTO(attributes.get("email"), attributes.get("password"), attributes.get("username"));
     }
 
     @Override
@@ -40,6 +40,7 @@ public class EmailProvider implements Provider<EmailDTO> {
     @Override
     public Mono<Identity> create(@Valid EmailDTO data) {
         User newUser = User.builder()
+                .username(data.getUsername())
                 .email(data.getEmail())
                 .build();
 

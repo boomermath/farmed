@@ -5,8 +5,10 @@ import io.micronaut.data.annotation.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @Embeddable
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewId implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

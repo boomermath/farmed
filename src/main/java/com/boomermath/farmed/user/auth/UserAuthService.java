@@ -38,20 +38,18 @@ public class UserAuthService<E> {
             String username = Objects.requireNonNull(attributes.get("username"), "USERNAME_REQUIRED");
 
             userMono = userRepository.existsByUsername(username)
-                    .flatMap(b -> {
-                        if (b) {
-                            return Mono.error(AuthenticationResponse.exception("USERNAME_EXISTS"));
-                        }
-
-                        return provider.create(provider.from(attributes))
+                    .filter(b -> !b)
+                    .switchIfEmpty( Mono.error(AuthenticationResponse.exception("USERNAME_EXISTS")))
+                    .flatMap(b ->
+                         provider.create(provider.from(attributes))
                                 .map(i -> {
                                     i.getUser().setUsername(username);
                                     i.getUser().setIdentity(i);
                                     return i;
                                 })
                                 .flatMap(i -> userRepository.save(i.getUser()))
-                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"));
-                    });
+                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+                    );
         } else {
             userMono = provider.authenticate(provider.from(attributes))
                     .map(Identity::getUser);

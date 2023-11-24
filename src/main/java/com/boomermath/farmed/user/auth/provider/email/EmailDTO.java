@@ -14,4 +14,5 @@ public final class EmailDTO {
     @Email
     private final String email;
     private final String password;
+    private final String username;
 }
