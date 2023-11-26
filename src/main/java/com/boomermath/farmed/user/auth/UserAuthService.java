@@ -2,10 +2,9 @@ package com.boomermath.farmed.user.auth;
 
 import com.boomermath.farmed.user.User;
 import com.boomermath.farmed.user.UserRepository;
-import com.boomermath.farmed.user.auth.dto.UserAuthenticationDTO;
 import com.boomermath.farmed.user.auth.identity.Identity;
-import com.boomermath.farmed.user.auth.identity.IdentityRepository;
 import com.boomermath.farmed.user.auth.provider.Provider;
+import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.token.generator.AccessRefreshTokenGenerator;
 import io.micronaut.security.token.render.AccessRefreshToken;
@@ -14,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
@@ -25,7 +23,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class UserAuthService<E> {
     private final UserRepository userRepository;
-    private final IdentityRepository identityRepository;
     private final AccessRefreshTokenGenerator tokenGenerator;
     private final Map<String, Provider<E>> providers;
 
@@ -56,7 +53,9 @@ public class UserAuthService<E> {
         }
 
         return userMono
-                .map(u -> tokenGenerator.generate(new UserAuthenticationDTO(u)))
+                .map(u -> tokenGenerator.generate(
+                        Authentication.build(u.getUsername(), Map.of("id", u.getId()))
+                ))
                 .flatMap(Mono::justOrEmpty);
     }
 }

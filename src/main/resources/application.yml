@@ -28,7 +28,7 @@ jpa:
     properties:
       hibernate:
         hbm2ddl:
-          # auto: update
+          #auto:  update
         show_sql: true
         connection:
           url: jdbc:postgresql://localhost:5432/farmed

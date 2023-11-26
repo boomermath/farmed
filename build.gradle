@@ -31,6 +31,7 @@ dependencies {
 
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.0.Final")
+    implementation("io.micronaut.sql:micronaut-vertx-pg-client")
     implementation("io.vertx:vertx-pg-client")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("com.ongres.scram:client:2.1")
@@ -48,7 +49,8 @@ dependencies {
     implementation("io.micronaut:micronaut-http-client")
     
     testCompileOnly("org.projectlombok:lombok:1.18.30")
-	testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+    testResourcesService("org.postgresql:postgresql")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
     testImplementation("io.micronaut:micronaut-http-client")
 
     aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")

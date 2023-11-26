@@ -1,3 +1,8 @@
-GET http://localhost:8080/farm/2aa2a2ca-af9c-4449-a78b-2af4d0492bea
+POST http://localhost:8080/farm/41caae5d-2bda-4849-abb0-f0295b1af0f8/reviews
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAwODExOTU4LCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiZDBlNmFhZmUtYTcyZC00MGQ4LTkwZTMtZDM1NTg5ODQxZDRmIiwiZXhwIjoxNzAwODE1NTU4LCJpYXQiOjE3MDA4MTE5NTh9.Hg54cZpFgseyKhLMXH8qZijA3knCwzlA4tFceNVBrg8
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAwOTU5NzM0LCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiMmJlNTRkNmQtZTBmMi00ODE3LTkwODUtOTBkZGZlMTIxMDNhIiwiZXhwIjoxNzAwOTYzMzM0LCJpYXQiOjE3MDA5NTk3MzR9.Kiy5koKzeFb9ttkafesxpreoDfcFtUvKBjsGxkorGbI
+
+{
+  "stars": 3,
+  "text": "This is a text for the review"
+}

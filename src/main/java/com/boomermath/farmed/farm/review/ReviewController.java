@@ -1,69 +1,61 @@
 package com.boomermath.farmed.farm.review;
 
+import io.micronaut.data.model.Page;
 import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.*;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 import java.util.UUID;
 
-@Controller("/farm/{farmId}")
+@Controller("/farm/{farmId}/reviews")
 @Secured(SecurityRule.IS_AUTHENTICATED)
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewRepository reviewRepository;
     private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
-    @Get("/reviews")
-    public Flux<Review> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
-                                   @QueryValue Optional<Integer> size) {
+
+    private ReviewIdDTO createReviewId(Authentication authentication, UUID farmId, UUID reviewId) {
+        UUID userId = UUID.fromString(authentication.getAttributes().get("id").toString());
+
+        return ReviewIdDTO.builder()
+                .farmId(farmId)
+                .userId(userId)
+                .id(reviewId)
+                .build();
+    }
+
+    @Get
+    public Mono<Page<Review>> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
+                                 @QueryValue Optional<Integer> size) {
         return reviewRepository.findByFarmIdOrderByUpdatedAtDesc(farmId,
                 Pageable.from(page.orElse(0), size.orElse(10)));
     }
 
-    @Post("/reviews")
+    @Post
     public Mono<ReviewDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
                                       @Body ReviewRequestDTO reviewDTO) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
-
-        ReviewId reviewId = ReviewId.builder()
-                .farmId(farmId)
-                .userId(userId)
-                .build();
-
-        return reviewService.createReview(reviewMapper.toEntity(reviewId, reviewDTO));
+        return reviewService.createReview(
+                reviewMapper.toEntity(createReviewId(authentication, farmId, null), reviewDTO)
+        );
     }
 
-    @Post("/reviews/{reviewId}")
+    @Put("/{reviewId}")
     public Mono<ReviewDTO> updateReview(Authentication authentication, @Body ReviewRequestDTO reviewDTO,
-                                     @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID requestedReviewId) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
-
-        ReviewId reviewId = ReviewId.builder()
-                .id(requestedReviewId)
-                .farmId(farmId)
-                .userId(userId)
-                .build();
-
-        return reviewService.updateReview(reviewMapper.toEntity(reviewId, reviewDTO));
+                                        @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID reviewId) {
+        return reviewService.updateReview(
+                reviewMapper.toEntity(createReviewId(authentication, farmId, reviewId), reviewDTO)
+        );
     }
 
-    @Delete("/reviews/{reviewId}")
+    @Delete("/{reviewId}")
     public Mono<Void> deleteReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
-                                   @PathVariable("reviewId") UUID requestedReviewId) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
-
-        ReviewId reviewId = ReviewId.builder()
-                .id(requestedReviewId)
-                .farmId(farmId)
-                .userId(userId)
-                .build();
-
-        return reviewService.deleteReview(reviewId);
+                                   @PathVariable("reviewId") UUID reviewId) {
+        return reviewService.deleteReview(createReviewId(authentication, farmId, reviewId));
     }
 }

@@ -15,6 +15,7 @@ public class ReviewDTO {
     private final UUID id;
     private final int stars;
     private final String text;
-    private UserDTO user;
+    private final UserDTO user;
+    private final boolean wasUpdated;
     private final LocalDateTime updatedAt;
 }

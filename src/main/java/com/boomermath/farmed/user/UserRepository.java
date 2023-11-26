@@ -14,8 +14,5 @@ public interface UserRepository extends ReactorCrudRepository<@Valid User, UUID>
     @Join("identity")
     Mono<User> findByEmail(String email);
 
-    @Join("identity")
-    Mono<UserAuthDTO> findByEmailEqual(String email);
-
     Mono<Boolean> existsByUsername(String username);
 }

@@ -1,6 +1,6 @@
 package com.boomermath.farmed.farm.contact.social;
 
-import com.boomermath.farmed.farm.contact.Contact;
+import com.boomermath.farmed.farm.Farm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,8 +21,8 @@ public class Social {
 
     @Column(unique = true)
     private SocialType socialType;
-    private String socialInfo;
+    private String socialIdentifier;
 
     @ManyToOne
-    private Contact contact;
+    private Farm farm;
 }

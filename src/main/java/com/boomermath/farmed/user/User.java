@@ -33,6 +33,6 @@ public class User {
     private LocalDateTime createdAt;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private Identity identity;
 }
