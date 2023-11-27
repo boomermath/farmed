@@ -20,8 +20,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ReviewId implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Builder.Default
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "farm_id", insertable = false, updatable = false)
     private UUID farmId;

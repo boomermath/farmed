@@ -1,9 +1,3 @@
-POST http://localhost:8080/farm/6f7c9d41-9230-4673-8358-689f9793b4e3/reviews
+DELETE  http://localhost:8080/farm/6f7c9d41-9230-4673-8358-689f9793b4e3/reviews/6a8a7a2b-9384-4df4-86a6-fb39255bbaaf
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAxMDYzODQ5LCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiODRmNjhiYWEtNmMyOC00Mzc1LWI3ZGQtNTYwYTk5NmMwNDc4IiwiZXhwIjoxNzAxMDY3NDQ5LCJpYXQiOjE3MDEwNjM4NDl9.t-mb75b7cwVxQ3dBFQZSv4liMhb1p6vAxXsWQWuADhQ
-
-
-{
-    "stars": 2,
-    "text": "LMAO"
-}

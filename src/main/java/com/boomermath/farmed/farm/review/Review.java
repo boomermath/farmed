@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Review {
@@ -36,10 +37,12 @@ public class Review {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @MapsId("user_id")
+    @ToString.Exclude
     private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "farm_id", insertable = false, updatable = false)
+    @ManyToOne
+    @MapsId("farm_id")
+    @ToString.Exclude
     private Farm farm;
 }

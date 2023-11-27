@@ -30,7 +30,7 @@ public class FarmController {
     @Get
     @Transactional
     public Mono<FarmDTO> farmInfo(@PathVariable UUID farmId, @QueryValue(defaultValue = "false") boolean contact, @QueryValue(defaultValue = "false") boolean schedule) {
-        return farmRepository.findOne(Specifications.idEquals(farmId))
+        return farmRepository.findById(farmId)
                 .map(farmMapper::toDTO);
     }
 }

@@ -19,6 +19,7 @@ public class ReviewController {
     private final ReviewRepository reviewRepository;
     private final ReviewService reviewService;
     private final ReviewMapper reviewMapper;
+    
     @Get("/reviews")
     public Flux<Review> getReviews(@PathVariable("farmId") UUID farmId, @QueryValue Optional<Integer> page,
                                    @QueryValue Optional<Integer> size) {
@@ -29,11 +30,11 @@ public class ReviewController {
     @Post("/reviews")
     public Mono<ReviewDTO> postReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
                                       @Body ReviewRequestDTO reviewDTO) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
+        String userId = (String) authentication.getAttributes().get("id");
 
         ReviewId reviewId = ReviewId.builder()
                 .farmId(farmId)
-                .userId(userId)
+                .userId(UUID.fromString(userId))
                 .build();
 
         return reviewService.createReview(reviewMapper.toEntity(reviewId, reviewDTO));
@@ -42,12 +43,12 @@ public class ReviewController {
     @Post("/reviews/{reviewId}")
     public Mono<ReviewDTO> updateReview(Authentication authentication, @Body ReviewRequestDTO reviewDTO,
                                      @PathVariable("farmId") UUID farmId, @PathVariable("reviewId") UUID requestedReviewId) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
+        String userId = (String) authentication.getAttributes().get("id");
 
         ReviewId reviewId = ReviewId.builder()
                 .id(requestedReviewId)
                 .farmId(farmId)
-                .userId(userId)
+                .userId(UUID.fromString(userId))
                 .build();
 
         return reviewService.updateReview(reviewMapper.toEntity(reviewId, reviewDTO));
@@ -56,12 +57,12 @@ public class ReviewController {
     @Delete("/reviews/{reviewId}")
     public Mono<Void> deleteReview(Authentication authentication, @PathVariable("farmId") UUID farmId,
                                    @PathVariable("reviewId") UUID requestedReviewId) {
-        UUID userId = (UUID) authentication.getAttributes().get("id");
+        String userId = (String) authentication.getAttributes().get("id");
 
         ReviewId reviewId = ReviewId.builder()
                 .id(requestedReviewId)
                 .farmId(farmId)
-                .userId(userId)
+                .userId(UUID.fromString(userId))
                 .build();
 
         return reviewService.deleteReview(reviewId);

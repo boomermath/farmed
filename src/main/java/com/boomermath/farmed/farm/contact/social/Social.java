@@ -1,5 +1,6 @@
 package com.boomermath.farmed.farm.contact.social;
 
+import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.farm.contact.Contact;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,9 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
+@Table(
+    uniqueConstraints = @UniqueConstraint(name = "social_info_constraint", columnNames = {"farm_id", "social_type"})
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,10 +23,7 @@ public class Social {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true)
+    @Column(name = "social_type")
     private SocialType socialType;
     private String socialInfo;
-
-    @ManyToOne
-    private Contact contact;
 }

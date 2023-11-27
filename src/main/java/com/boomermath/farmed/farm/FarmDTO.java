@@ -16,6 +16,6 @@ public class FarmDTO {
     private final UUID id;
     private final String name;
 
-    private final List<DailyScheduleDTO> schedule;
+  //  private final List<DailyScheduleDTO> schedule;
     private final ContactDTO contact;
 }

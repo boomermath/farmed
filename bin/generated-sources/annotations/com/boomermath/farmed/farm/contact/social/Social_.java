@@ -1,6 +1,5 @@
 package com.boomermath.farmed.farm.contact.social;
 
-import com.boomermath.farmed.farm.contact.Contact;
 import jakarta.annotation.Generated;
 import jakarta.persistence.metamodel.EntityType;
 import jakarta.persistence.metamodel.SingularAttribute;
@@ -11,11 +10,6 @@ import java.util.UUID;
 @Generated("org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 public abstract class Social_ {
 
-	
-	/**
-	 * @see com.boomermath.farmed.farm.contact.social.Social#contact
-	 **/
-	public static volatile SingularAttribute<Social, Contact> contact;
 	
 	/**
 	 * @see com.boomermath.farmed.farm.contact.social.Social#id
@@ -37,7 +31,6 @@ public abstract class Social_ {
 	 **/
 	public static volatile EntityType<Social> class_;
 
-	public static final String CONTACT = "contact";
 	public static final String ID = "id";
 	public static final String SOCIAL_TYPE = "socialType";
 	public static final String SOCIAL_INFO = "socialInfo";
