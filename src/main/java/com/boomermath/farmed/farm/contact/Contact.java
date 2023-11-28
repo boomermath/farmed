@@ -1,14 +1,13 @@
 package com.boomermath.farmed.farm.contact;
 
 import com.boomermath.farmed.farm.contact.social.Social;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Embeddable
 @Getter
@@ -18,6 +17,7 @@ public class Contact {
     private String email;
     private String website;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Social> social;
+     @OneToMany
+     @JoinColumn(name= "farm_id")
+     private List<Social> social;
 }

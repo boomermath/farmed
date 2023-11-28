@@ -10,18 +10,20 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(name = "review_constraint", columnNames = {"farm_id", "user_id"})
+)
 @Builder
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Review {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @EmbeddedId
+    private ReviewId id;
 
     @Min(1)
     @Max(5)
@@ -35,16 +37,12 @@ public class Review {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @MapsId("user_id")
+    @ToString.Exclude
     private User user;
 
-    @Column(name = "user_id")
-    private UUID userId;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "farm_id", insertable = false, updatable = false)
+    @ManyToOne
+    @MapsId("farm_id")
+    @ToString.Exclude
     private Farm farm;
-
-    @Column(name = "farm_id")
-    private UUID farmId;
 }

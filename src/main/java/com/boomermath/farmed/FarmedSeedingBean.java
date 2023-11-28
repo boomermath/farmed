@@ -2,7 +2,6 @@ package com.boomermath.farmed;
 
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.farm.FarmRepository;
-import com.boomermath.farmed.user.UserRepository;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
 import jakarta.inject.Singleton;
@@ -12,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FarmedSeedingBean {
     private final FarmRepository farmRepository;
-    private final UserRepository userRepository;
+
     @EventListener
     public void appStart(ApplicationStartupEvent event) {
         Farm farm = Farm.builder()
-                .name("Union")
-                .build();
+        .name("Union")
+        .build();
 
-    //    farmRepository.save(farm).block();
+      //  farmRepository.save(farm).block();
     }
 }

@@ -1,28 +1,34 @@
 package com.boomermath.farmed.farm.review;
 
+import com.boomermath.farmed.user.User;
+import com.boomermath.farmed.user.UserDTO;
+
 import io.micronaut.context.annotation.Mapper;
 import io.micronaut.context.annotation.Mapper.Mapping;
 import jakarta.inject.Singleton;
 
 @Singleton
 public interface ReviewMapper {
-    default Review toEntity(ReviewIdDTO reviewId, ReviewRequestDTO reviewRequestDTO) {
+    default Review toEntity(ReviewId reviewId, ReviewRequestDTO reviewRequestDTO) {
         return Review.builder()
-                .id(reviewId.getId())
-                .farmId(reviewId.getFarmId())
-                .userId(reviewId.getUserId())
+                .id(reviewId)
                 .stars(reviewRequestDTO.getStars())
                 .text(reviewRequestDTO.getText())
                 .build();
     }
 
-    @Mapper(
-            {
-                    @Mapping(
-                            to = "wasUpdated",
-                            from = "#{true}"
-                    )
-            }
-    )
+    @Mapper({
+        @Mapping(
+            to = "id",
+            from ="#{review.getId().getId()}"
+        ),
+        // @Mapping(
+        //     to = "user",
+        //     from = "#{this.toUserDTO(review.getUser())}"
+        // )
+    })
     ReviewDTO toDTO(Review review);
+
+    @Mapper
+    UserDTO toUserDTO(User user);
 }
