@@ -12,9 +12,9 @@ import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import reactor.core.publisher.Mono;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,7 +45,7 @@ public class UserAuthService<E> {
                                     return i;
                                 })
                                 .flatMap(i -> userRepository.save(i.getUser()))
-                                .onErrorMap(SQLIntegrityConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+                                .onErrorMap(ConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
                     );
         } else {
             userMono = provider.authenticate(provider.from(attributes))

@@ -1,7 +1,5 @@
 package com.boomermath.farmed.farm.contact.social;
 
-import com.boomermath.farmed.farm.Farm;
-import com.boomermath.farmed.farm.contact.Contact;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

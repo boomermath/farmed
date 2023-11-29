@@ -2,7 +2,6 @@ package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.user.User;
 import com.boomermath.farmed.user.UserDTO;
-
 import io.micronaut.context.annotation.Mapper;
 import io.micronaut.context.annotation.Mapper.Mapping;
 import jakarta.inject.Singleton;
@@ -22,10 +21,10 @@ public interface ReviewMapper {
             to = "id",
             from ="#{review.getId().getId()}"
         ),
-        // @Mapping(
-        //     to = "user",
-        //     from = "#{this.toUserDTO(review.getUser())}"
-        // )
+         @Mapping(
+             to = "user",
+             from = "#{review.getUser() != null ? this.toUserDTO(review.getUser()) : null}"
+         )
     })
     ReviewDTO toDTO(Review review);
 

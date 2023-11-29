@@ -1,10 +1,7 @@
 package com.boomermath.farmed.user;
 
 import com.boomermath.farmed.user.auth.identity.Identity;
-
-import io.micronaut.core.annotation.Introspected;
 import io.micronaut.data.annotation.DateCreated;
-import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -17,8 +14,6 @@ import java.util.UUID;
 @Setter
 @Builder
 @ToString
-@Serdeable
-@Introspected
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
@@ -37,7 +32,7 @@ public class User {
     @DateCreated
     private LocalDateTime createdAt;
 
-    @ToString.Exclude
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @ToString.Exclude
     private Identity identity;
 }

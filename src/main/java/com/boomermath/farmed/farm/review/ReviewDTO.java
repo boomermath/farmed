@@ -1,6 +1,6 @@
 package com.boomermath.farmed.farm.review;
 
-import com.boomermath.farmed.user.User;
+import com.boomermath.farmed.user.UserDTO;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class ReviewDTO {
     private final UUID id;
     private final int stars;
     private final String text;
-    private final User user;
+    private final UserDTO user;
     private final LocalDateTime updatedAt;
 }

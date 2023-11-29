@@ -1,13 +1,13 @@
 package com.boomermath.farmed.farm.contact;
 
 import com.boomermath.farmed.farm.contact.social.Social;
-
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Embeddable
 @Getter
