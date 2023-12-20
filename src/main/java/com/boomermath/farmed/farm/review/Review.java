@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -32,16 +34,18 @@ public class Review {
     private String text;
 
     @DateCreated
+    @CreationTimestamp
     private LocalDateTime createdAt;
     @DateUpdated
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("user_id")
     @ToString.Exclude
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("farm_id")
     @ToString.Exclude
     private Farm farm;

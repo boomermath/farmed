@@ -1,8 +1,8 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.2.0"
-    id("io.micronaut.test-resources") version "4.2.0"
-    id("io.micronaut.aot") version "4.2.0"
+    id("io.micronaut.application") version "4.2.1"
+    id("io.micronaut.test-resources") version "4.2.1"
+    id("io.micronaut.aot") version "4.2.1"
 }
 
 version = "0.1"
@@ -31,7 +31,6 @@ dependencies {
 
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.0.Final")
-    implementation("io.micronaut.sql:micronaut-vertx-pg-client")
     implementation("io.vertx:vertx-pg-client")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("com.ongres.scram:client:2.1")

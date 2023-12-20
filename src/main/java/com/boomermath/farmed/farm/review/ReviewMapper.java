@@ -17,17 +17,18 @@ public interface ReviewMapper {
     }
 
     @Mapper({
-        @Mapping(
-            to = "id",
-            from ="#{review.getId().getId()}"
-        ),
-         @Mapping(
-             to = "user",
-             from = "#{review.getUser() != null ? this.toUserDTO(review.getUser()) : null}"
-         )
+            @Mapping(
+                    to = "id",
+                    from = "#{review.id.id}"
+            ),
+            @Mapping(
+                    to = "timestamp",
+                    from = "#{review.updatedAt}"
+            ),
+            @Mapping(
+                    to = "updated",
+                    from = "#{review.createdAt.isEqual(review.updatedAt)}"
+            )
     })
     ReviewDTO toDTO(Review review);
-
-    @Mapper
-    UserDTO toUserDTO(User user);
 }

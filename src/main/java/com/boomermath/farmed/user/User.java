@@ -32,7 +32,7 @@ public class User {
     @DateCreated
     private LocalDateTime createdAt;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     private Identity identity;
 }

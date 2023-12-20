@@ -47,8 +47,7 @@ public class ReviewController {
                 .farmId(farmId)
                 .build();
 
-        return reviewService.createReview(reviewMapper.toEntity(reviewId, reviewDTO))
-                .onErrorMap(ConstraintViolationException.class, e -> AuthenticationResponse.exception("REVIEW_EXISTS"));
+        return reviewService.createReview(reviewMapper.toEntity(reviewId, reviewDTO));
     }
 
     @Post("/{reviewId}")

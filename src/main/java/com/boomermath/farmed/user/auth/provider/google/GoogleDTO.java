@@ -2,6 +2,7 @@ package com.boomermath.farmed.user.auth.provider.google;
 
 
 import io.micronaut.core.annotation.Introspected;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -10,6 +11,6 @@ import lombok.NonNull;
 @Getter
 @AllArgsConstructor
 public class GoogleDTO {
-    @NonNull
+    @NotEmpty
     private final String idToken;
 }

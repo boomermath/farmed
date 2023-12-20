@@ -24,9 +24,8 @@ public class FarmedSeedingBean {
 //                .builder()
 //                .id(
 //                        ReviewId.builder()
-//                                .id(UUID.randomUUID())
-//                                .userId(UUID.fromString("2be54d6d-e0f2-4817-9085-90ddfe12103a"))
-//                                .farmId(UUID.fromString("41caae5d-2bda-4849-abb0-f0295b1af0f8"))
+//                                .farmId(UUID.fromString("3c42cd80-f048-412b-be42-5d5095a4a1a8"))
+//                                .userId(UUID.fromString("edf7bb32-e0bc-4e84-99a9-d0d02dfaea36"))
 //                                .build()
 //                )
 //                .stars(3)
