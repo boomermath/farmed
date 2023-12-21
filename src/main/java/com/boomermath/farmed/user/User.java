@@ -2,14 +2,17 @@ package com.boomermath.farmed.user;
 
 import com.boomermath.farmed.user.auth.identity.Identity;
 import io.micronaut.data.annotation.DateCreated;
+import io.micronaut.data.annotation.MappedEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "farmed_user")
+@MappedEntity("farmed_user")
 @Getter
 @Setter
 @Builder
@@ -21,7 +24,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NonNull
+    @NotBlank
     @Email(message = "INVALID_EMAIL")
     @Column(unique = true)
     private String email;

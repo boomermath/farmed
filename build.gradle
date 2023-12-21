@@ -3,6 +3,7 @@ plugins {
     id("io.micronaut.application") version "4.2.1"
     id("io.micronaut.test-resources") version "4.2.1"
     id("io.micronaut.aot") version "4.2.1"
+    id("org.jooq.jooq-codegen-gradle") version "3.19.0"
 }
 
 version = "0.1"
@@ -29,11 +30,19 @@ dependencies {
     annotationProcessor("io.micronaut.security:micronaut-security-annotations")
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
-    implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
-    annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.0.Final")
-    implementation("io.vertx:vertx-pg-client")
-    implementation("io.micronaut.reactor:micronaut-reactor")
-    implementation("com.ongres.scram:client:2.1")
+    implementation("io.micronaut.data:micronaut-data-r2dbc")
+    implementation("io.micronaut.sql:micronaut-jooq")
+    runtimeOnly("org.postgresql:r2dbc-postgresql")
+    // https://mvnrepository.com/artifact/org.jooq/jooq-meta-extensions
+    implementation("org.jooq:jooq-meta-extensions-hibernate:3.19.0")
+    implementation("org.jooq:jooq-meta:3.19.0")
+    implementation("org.jooq:jooq-codegen:3.19.0")
+
+//    implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
+//    annotationProcessor("org.hibernate:hibernate-jpamodelgen:6.4.0.Final")
+//    implementation("io.vertx:vertx-pg-client")
+//    implementation("io.micronaut.reactor:micronaut-reactor")
+//    implementation("com.ongres.scram:client:2.1")
 
 //    implementation("io.micronaut.data:micronaut-data-r2dbc:4.2.0")
 //    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
@@ -82,5 +91,19 @@ micronaut {
         deduceEnvironment = true
         optimizeNetty = true
         configurationProperties.put("micronaut.security.jwks.enabled", "false")
+    }
+}
+
+jooq {
+    configuration {
+        generator {
+            database {
+                name = "org.jooq.meta.extensions.jpa.JPADatabase"
+                target {
+                    packageName = "com.boomermath.farmed"
+                    directory = "./bin"
+                }
+            }
+        }
     }
 }

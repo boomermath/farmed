@@ -13,19 +13,19 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
-@Controller("/user/auth")
+@Controller("/user/auth/{authMethod}")
 @Secured(SecurityRule.IS_ANONYMOUS)
 @RequiredArgsConstructor
 @Slf4j
 public class UserAuthController<E> {
     private final UserAuthService<E> userAuthService;
 
-    @Post("/{authMethod}/login")
+    @Post("/login")
     public Mono<AccessRefreshToken> login(@Body Map<String, String> body, @PathVariable String authMethod) {
         return userAuthService.authenticate(body, authMethod, false);
     }
 
-    @Post("/{authMethod}/register")
+    @Post("/register")
     public Mono<AccessRefreshToken> register(@Body Map<String, String> body, @PathVariable String authMethod) {
         return userAuthService.authenticate(body, authMethod, true);
     }

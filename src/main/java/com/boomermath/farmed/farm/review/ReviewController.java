@@ -9,7 +9,6 @@ import io.micronaut.security.authentication.AuthenticationFailureReason;
 import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.rules.SecurityRule;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.exception.ConstraintViolationException;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;

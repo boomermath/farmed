@@ -12,7 +12,6 @@ import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -26,8 +25,14 @@ public class UserAuthService<E> {
     private final AccessRefreshTokenGenerator tokenGenerator;
     private final Map<String, Provider<E>> providers;
 
-    @Transactional
     public Mono<AccessRefreshToken> authenticate(Map<String, String> attributes, String authMethod, boolean isNewUser) {
+
+        log.info(String.valueOf(providers.size()));
+
+        for (String key: providers.keySet()) {
+            log.info(key);
+        }
+
         Provider<E> provider = Objects.requireNonNull(providers.get(authMethod), "INVALID_AUTH_METHOD");
         Mono<User> userMono;
 
@@ -45,7 +50,7 @@ public class UserAuthService<E> {
                                     return i;
                                 })
                                 .flatMap(i -> userRepository.save(i.getUser()))
-                                .onErrorMap(ConstraintViolationException.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
+                                .onErrorMap(Exception.class, e -> AuthenticationResponse.exception("USER_EXISTS"))
                     );
         } else {
             userMono = provider.authenticate(provider.from(attributes))

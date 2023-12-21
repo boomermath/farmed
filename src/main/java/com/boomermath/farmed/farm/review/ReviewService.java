@@ -2,12 +2,9 @@ package com.boomermath.farmed.farm.review;
 
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.farm.FarmRepository;
-import io.micronaut.security.authentication.AuthenticationResponse;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
@@ -24,61 +21,77 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
 
     public Mono<ReviewDTO> createReview(Review review) {
-        return farmRepository.findById(review.getId().getFarmId())
-                .flatMap(f -> updateFarmAndReview(f, review, ReviewStatus.CREATE))
-                .map(reviewMapper::toDTO)
-                .onErrorMap(ConstraintViolationException.class, e -> AuthenticationResponse.exception("REVIEW_EXISTS"));
+        return updateFarmAndReview(review, ReviewStatus.CREATE)
+                .map(reviewMapper::toDTO);
     }
 
     public Mono<ReviewDTO> updateReview(Review review) {
-        return reviewRepository.findById(review.getId())
-                .switchIfEmpty(Mono.error(new RuntimeException("INVALID_REVIEW")))
-                .flatMap(r -> updateFarmAndReview(r.getFarm(), review, ReviewStatus.UPDATE))
+        return updateFarmAndReview(review, ReviewStatus.UPDATE)
                 .map(reviewMapper::toDTO);
     }
 
     public Mono<Void> deleteReview(ReviewId reviewId) {
-        return reviewRepository.findById(reviewId)
-                .switchIfEmpty(Mono.error(new RuntimeException("INVALID_REVIEW")))
-                .flatMap(r -> updateFarmAndReview(r.getFarm(), r, ReviewStatus.DELETE))
+        Review review = Review.builder()
+                .id(reviewId)
+                .text("")
+                .stars(0)
+                .build();
+
+        return updateFarmAndReview(review, ReviewStatus.DELETE)
                 .then();
     }
 
-    @Transactional
-    protected Mono<Review> updateFarmAndReview(Farm farm, Review review, ReviewStatus reviewStatus) {
-        int reviewCount = farm.getReviewCount();
-        int newRating;
+    protected Mono<Review> updateFarmAndReview(Review review, ReviewStatus reviewStatus) {
+        Mono<Farm> farmMono;
+        Mono<Review> reviewMono;
 
-        switch (reviewStatus) {
-            case CREATE:
-                reviewCount++;
-                newRating = ((farm.getRating() * reviewCount) + review.getStars()) / (reviewCount + 1);
-                break;
-            case UPDATE:
-                newRating = ((farm.getRating() * reviewCount) - review.getStars() + review.getStars())
-                        / reviewCount;
-                break;
-            case DELETE:
-                if (reviewCount == 1) {
-                    newRating = 0;
-                    reviewCount = 0;
-                } else {
-                    reviewCount--;
-                    newRating = ((farm.getRating() * reviewCount) - review.getStars())
-                            / reviewCount;
-                }
-                break;
-            default:
-                throw new IllegalStateException("Invalid review status: " + reviewStatus);
+        if (reviewStatus == ReviewStatus.CREATE) {
+            farmMono = farmRepository.findById(review.getId().getFarmId());
+            reviewMono = Mono.just(review);
+        } else {
+            reviewMono = reviewRepository.findById(review.getId());
+            farmMono = reviewMono.map(Review::getFarm);
         }
 
-        farm.setRating(newRating);
-        farm.setReviewCount(reviewCount);
+        return Mono.zip(reviewMono, farmMono)
+                .map(tuple -> {
+                    Review rev = tuple.getT1();
+                    Farm farm = tuple.getT2();
 
-        Mono<Review> reviewMono = reviewStatus == ReviewStatus.DELETE ? reviewRepository.delete(review)
-                .map(l -> review) : reviewRepository.save(review);
+                    int reviewCount = farm.getReviewCount();
+                    int newRating;
 
-        return Mono.zip(farmRepository.save(farm), reviewMono)
+                    switch (reviewStatus) {
+                        case CREATE:
+                            reviewCount++;
+                            newRating = ((farm.getRating() * reviewCount) + rev.getStars());
+                            break;
+                        case UPDATE:
+                            newRating = ((farm.getRating() * reviewCount) - rev.getStars() + review.getStars());
+                            break;
+                        case DELETE:
+                            if (reviewCount == 1) {
+                                newRating = 0;
+                                reviewCount = 0;
+                            } else {
+                                reviewCount--;
+                                newRating = ((farm.getRating() * reviewCount) - rev.getStars());
+                            }
+                            break;
+                        default:
+                            newRating = farm.getRating();
+                            break;
+                    }
+
+                    if (reviewCount != 0) {
+                        newRating /= reviewCount;
+                    }
+
+                    farm.setRating(newRating);
+                    farm.setReviewCount(reviewCount);
+                    return tuple;
+                })
+                .flatMap(t -> Mono.zip(farmRepository.save(t.getT2()), reviewRepository.save(t.getT1())))
                 .map(Tuple2::getT2);
     }
 }

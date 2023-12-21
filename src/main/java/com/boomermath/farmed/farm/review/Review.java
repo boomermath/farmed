@@ -7,9 +7,8 @@ import io.micronaut.data.annotation.DateUpdated;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,14 +29,12 @@ public class Review {
     @Min(1)
     @Max(5)
     private int stars;
-    @NonNull
+    @NotBlank
     private String text;
 
     @DateCreated
-    @CreationTimestamp
     private LocalDateTime createdAt;
     @DateUpdated
-    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
