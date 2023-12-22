@@ -5,7 +5,6 @@ import io.micronaut.core.annotation.Introspected;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
 
 @Introspected
 @Getter

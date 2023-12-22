@@ -9,7 +9,6 @@ import io.micronaut.security.authentication.AuthenticationResponse;
 import io.micronaut.security.token.generator.AccessRefreshTokenGenerator;
 import io.micronaut.security.token.render.AccessRefreshToken;
 import jakarta.inject.Singleton;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;

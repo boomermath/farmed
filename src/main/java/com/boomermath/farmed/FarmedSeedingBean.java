@@ -1,16 +1,11 @@
 package com.boomermath.farmed;
 
-import com.boomermath.farmed.farm.FarmRepository;
-import com.boomermath.farmed.farm.review.Review;
-import com.boomermath.farmed.farm.review.ReviewId;
 import com.boomermath.farmed.farm.review.ReviewRepository;
 import io.micronaut.runtime.event.ApplicationStartupEvent;
 import io.micronaut.runtime.event.annotation.EventListener;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.UUID;
 
 @Singleton
 @RequiredArgsConstructor

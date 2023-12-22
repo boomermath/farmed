@@ -1,7 +1,5 @@
 package com.boomermath.farmed.farm.review;
 
-import com.boomermath.farmed.user.User;
-import com.boomermath.farmed.user.UserDTO;
 import io.micronaut.context.annotation.Mapper;
 import io.micronaut.context.annotation.Mapper.Mapping;
 import jakarta.inject.Singleton;

@@ -19,9 +19,27 @@ micronaut:
     endpoints:
       login:
         enabled: false
-r2dbc:
-  datasources:
-    default:
-      url: r2dbc:postgresql://localhost:5432/farmed
-      username: boomermath
-      password: DAONE364
+    properties:
+      hibernate:
+        connection:
+          db-type: postgres
+      reactive: true
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/farmed
+    username: boomermath
+    password: DAONE364
+
+
+jpa:
+  default:
+    reactive: true
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
+        connection:
+          url: jdbc:postgresql://localhost:5432/farmed
+          username: boomermath
+          password: DAONE364
