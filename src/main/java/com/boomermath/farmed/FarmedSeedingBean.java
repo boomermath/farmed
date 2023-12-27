@@ -6,15 +6,21 @@ import io.micronaut.runtime.event.annotation.EventListener;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.DSLContext;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 @Singleton
 @RequiredArgsConstructor
 @Slf4j
 public class FarmedSeedingBean {
     private final ReviewRepository reviewRepository;
-
+//    private final DSLContext dsl;
+    private final DataSource dataSource;
     @EventListener
-    public void appStart(ApplicationStartupEvent event) {
+    public void appStart(ApplicationStartupEvent event) throws SQLException {
+        log.info(dataSource.getConnection().getCatalog());
 //        Review review = Review
 //                .builder()
 //                .id(

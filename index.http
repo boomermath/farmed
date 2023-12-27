@@ -1,8 +1,3 @@
-POST http://localhost:8080/farm/3c42cd80-f048-412b-be42-5d5095a4a1a8/reviews/ad721303-1bf4-448c-ace7-de13649cc400
+GET http://localhost:8080/farm/3c42cd80-f048-412b-be42-5d5095a4a1a8
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAzMTEzNTQ1LCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiZWRmN2JiMzItZTBiYy00ZTg0LTk5YTktZDBkMDJkZmFlYTM2IiwiZXhwIjoxNzAzMTE3MTQ1LCJpYXQiOjE3MDMxMTM1NDV9.d4HBmEbnHjs-yu2XmIawfw92FrTmAJgBB6oxmRAxAMM
-
-{
-  "stars": 5,
-  "text": "nice big"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAzNjQxMTUxLCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiZWRmN2JiMzItZTBiYy00ZTg0LTk5YTktZDBkMDJkZmFlYTM2IiwiZXhwIjoxNzAzNjQ0NzUxLCJpYXQiOjE3MDM2NDExNTF9.DdAs13ul-DDqZzPlDaV-bhfmBfgP9h_T6Vdzq4_XXBU

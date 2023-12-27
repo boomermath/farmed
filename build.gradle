@@ -1,65 +1,76 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.micronaut.application") version "4.2.1"
-    id("io.micronaut.test-resources") version "4.2.1"
-    id("io.micronaut.aot") version "4.2.1"
+    id('com.github.johnrengelman.shadow') version '8.1.1'
+    id('io.micronaut.application') version '4.2.1'
+    id('io.micronaut.test-resources') version '4.2.1'
+    id('io.micronaut.aot') version '4.2.1'
+    id('org.jooq.jooq-codegen-gradle') version '3.19.0'
 }
 
-version = "0.1"
-group = "com.boomermath"
+version = '0.1'
+group = 'com.boomermath'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation("org.springframework.security:spring-security-crypto:6.1.3")
-    implementation("org.slf4j:jcl-over-slf4j")
+    implementation('org.springframework.security:spring-security-crypto:6.1.3')
+    implementation('org.slf4j:jcl-over-slf4j')
 
-    implementation("com.google.api-client:google-api-client:2.2.0")
+    implementation('com.google.api-client:google-api-client:2.2.0')
 
-    runtimeOnly("org.yaml:snakeyaml")
-    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly('org.yaml:snakeyaml')
+    runtimeOnly('ch.qos.logback:logback-classic')
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly('org.projectlombok:lombok:1.18.30')
+    annotationProcessor('org.projectlombok:lombok:1.18.30')
 
-    annotationProcessor("io.micronaut.validation:micronaut-validation-processor")
-    annotationProcessor("io.micronaut.data:micronaut-data-processor")
-    annotationProcessor("io.micronaut.security:micronaut-security-annotations")
-    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    annotationProcessor('io.micronaut.validation:micronaut-validation-processor')
+    annotationProcessor('io.micronaut.data:micronaut-data-processor')
+    annotationProcessor('io.micronaut.security:micronaut-security-annotations')
+    annotationProcessor('io.micronaut.serde:micronaut-serde-processor')
 
-    implementation("com.ongres.scram:client:2.1")
+    //implementation("com.ongres.scram:client:2.1")
+
+
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     implementation("io.vertx:vertx-pg-client")
-    implementation("io.micronaut.reactor:micronaut-reactor")
-   // implementation("io.micronaut.sql:micronaut-jooq")
+    //implementation("io.micronaut.reactor:micronaut-reactor")
+    //implementation("io.vertx:vertx-pg-client")
+    implementation('io.micronaut.sql:micronaut-jooq')
+    runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation('org.jooq:jooq-meta:3.19.0')
+    implementation('org.jooq:jooq-codegen:3.19.0')
+    implementation('org.postgresql:postgresql:42.7.1')
+    implementation('org.postgresql:r2dbc-postgresql:1.0.3.RELEASE')
+    jooqCodegen('org.postgresql:postgresql:42.7.1')
 
-    implementation("io.micronaut.security:micronaut-security-jwt")
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
-    implementation("io.micronaut.validation:micronaut-validation")
-    implementation("io.micronaut:micronaut-http-client")
+    implementation('io.micronaut.security:micronaut-security-jwt')
+    implementation('io.micronaut.serde:micronaut-serde-jackson')
+    implementation('io.micronaut.validation:micronaut-validation')
+    implementation('io.micronaut:micronaut-http-client')
 
-    testCompileOnly("org.projectlombok:lombok:1.18.30")
-    testResourcesService("org.postgresql:postgresql")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
-    testImplementation("io.micronaut:micronaut-http-client")
+    testCompileOnly('org.projectlombok:lombok:1.18.30')
+    //  testResourcesService("org.postgresql:postgresql")
+    testAnnotationProcessor('org.projectlombok:lombok:1.18.30')
+    // testImplementation("io.micronaut:micronaut-http-client")
 
-    aotPlugins platform("io.micronaut.platform:micronaut-platform:4.1.5")
-    aotPlugins("io.micronaut.security:micronaut-security-aot")
+    aotPlugins platform('io.micronaut.platform:micronaut-platform:4.1.5')
+    aotPlugins('io.micronaut.security:micronaut-security-aot')
 }
 
 application {
-    mainClass.set("com.boomermath.farmed.FarmedApplication")
+    mainClass.set('com.boomermath.farmed.FarmedApplication')
+    project.gradle.startParameter.excludedTaskNames.add('jooqCodegen')
 }
 
 graalvmNative.toolchainDetection = false
 micronaut {
-    runtime("netty")
-    testRuntime("junit5")
+    runtime('netty')
+    testRuntime('junit5')
     processing {
         incremental(true)
-        annotations("com.boomermath.*")
+        annotations('com.boomermath.*')
     }
     aot {
         // Please review carefully the optimizations enabled below
@@ -71,6 +82,29 @@ micronaut {
         optimizeClassLoading = true
         deduceEnvironment = true
         optimizeNetty = true
-        configurationProperties.put("micronaut.security.jwks.enabled", "false")
+        configurationProperties.put('micronaut.security.jwks.enabled', 'false')
+    }
+}
+
+jooq {
+    configuration {
+        jdbc {
+            driver = 'org.postgresql.Driver'
+            url = 'jdbc:postgresql://localhost:5432/farmed'
+            user = 'boomermath'
+            password = 'DAONE364'
+        }
+
+        generator {
+            database {
+                name = 'org.jooq.meta.postgres.PostgresDatabase'
+                inputSchema = 'public'
+            }
+
+            target {
+                packageName = 'com.boomermath.farmed.jooq'
+                directory = "$projectDir/target"
+            }
+        }
     }
 }
