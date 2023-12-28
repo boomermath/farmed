@@ -30,15 +30,9 @@ dependencies {
     annotationProcessor('io.micronaut.security:micronaut-security-annotations')
     annotationProcessor('io.micronaut.serde:micronaut-serde-processor')
 
-    //implementation("com.ongres.scram:client:2.1")
-
-
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     implementation("io.vertx:vertx-pg-client")
-    //implementation("io.micronaut.reactor:micronaut-reactor")
-    //implementation("io.vertx:vertx-pg-client")
     implementation('io.micronaut.sql:micronaut-jooq')
-    runtimeOnly("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation('org.jooq:jooq-meta:3.19.0')
     implementation('org.jooq:jooq-codegen:3.19.0')
     implementation('org.postgresql:postgresql:42.7.1')
@@ -61,7 +55,6 @@ dependencies {
 
 application {
     mainClass.set('com.boomermath.farmed.FarmedApplication')
-    project.gradle.startParameter.excludedTaskNames.add('jooqCodegen')
 }
 
 graalvmNative.toolchainDetection = false
@@ -102,9 +95,12 @@ jooq {
             }
 
             target {
-                packageName = 'com.boomermath.farmed.jooq'
+                packageName = 'com.boomermath.jooq'
                 directory = "$projectDir/target"
             }
         }
     }
+
+
 }
+
