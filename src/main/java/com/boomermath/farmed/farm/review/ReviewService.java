@@ -3,6 +3,7 @@ package com.boomermath.farmed.farm.review;
 import com.boomermath.farmed.farm.Farm;
 import com.boomermath.farmed.farm.FarmRepository;
 import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -12,7 +13,7 @@ import reactor.util.function.Tuple2;
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewService {
-    private enum ReviewStatus {
+    protected enum ReviewStatus {
         CREATE, UPDATE, DELETE
     }
 
@@ -41,57 +42,45 @@ public class ReviewService {
                 .then();
     }
 
+    @Transactional
     protected Mono<Review> updateFarmAndReview(Review review, ReviewStatus reviewStatus) {
         Mono<Farm> farmMono;
         Mono<Review> reviewMono;
 
         if (reviewStatus == ReviewStatus.CREATE) {
             farmMono = farmRepository.findById(review.getId().getFarmId());
-            reviewMono = Mono.just(review);
+            reviewMono = reviewRepository.save(review);
         } else {
             reviewMono = reviewRepository.findById(review.getId());
             farmMono = reviewMono.map(Review::getFarm);
         }
 
-        return Mono.zip(reviewMono, farmMono)
-                .map(tuple -> {
-                    Review rev = tuple.getT1();
-                    Farm farm = tuple.getT2();
+        return Mono.zip(farmMono, reviewMono).map(tuple -> {
+            Review currentReview = tuple.getT2();
+            Farm farm = tuple.getT1();
 
-                    int reviewCount = farm.getReviewCount();
-                    int newRating;
+            int rCount = farm.getReviewCount();
+            double rating = farm.getRating();
 
-                    switch (reviewStatus) {
-                        case CREATE:
-                            reviewCount++;
-                            newRating = ((farm.getRating() * reviewCount) + rev.getStars());
-                            break;
-                        case UPDATE:
-                            newRating = ((farm.getRating() * reviewCount) - rev.getStars() + review.getStars());
-                            break;
-                        case DELETE:
-                            if (reviewCount == 1) {
-                                newRating = 0;
-                                reviewCount = 0;
-                            } else {
-                                reviewCount--;
-                                newRating = ((farm.getRating() * reviewCount) - rev.getStars());
-                            }
-                            break;
-                        default:
-                            newRating = farm.getRating();
-                            break;
-                    }
+            switch (reviewStatus) {
+                case CREATE:
+                    rating = ((rating * rCount) + rating) / (rCount+1);
+                    rCount++;
+                    break;
+                case UPDATE:
+                    rating = ((rating * rCount) + rating - currentReview.getStars()) / rCount;
+                    break;
+                case DELETE:
+                    rating = ((rating * rCount)  - currentReview.getStars()) / (rCount-1);
+                    rCount--;
+                    break;
+                default:
+                    break;
+            }
 
-                    if (reviewCount != 0) {
-                        newRating /= reviewCount;
-                    }
-
-                    farm.setRating(newRating);
-                    farm.setReviewCount(reviewCount);
-                    return tuple;
-                })
-                .flatMap(t -> Mono.zip(farmRepository.save(t.getT2()), reviewRepository.save(t.getT1())))
-                .map(Tuple2::getT2);
+            farm.setRating(rating);
+            farm.setReviewCount(rCount);
+            return tuple;
+        }).map(Tuple2::getT2);
     }
 }

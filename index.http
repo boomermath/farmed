@@ -1,3 +1,9 @@
-GET http://localhost:8080/farm/3c42cd80-f048-412b-be42-5d5095a4a1a8
+POST http://localhost:8080/farm/cd3b10ed-a129-4f38-86fc-755f896984fe/reviews/732749ba-f5b7-4bc3-9e3f-0464892824c2
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzAzNjQxMTUxLCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiZWRmN2JiMzItZTBiYy00ZTg0LTk5YTktZDBkMDJkZmFlYTM2IiwiZXhwIjoxNzAzNjQ0NzUxLCJpYXQiOjE3MDM2NDExNTF9.DdAs13ul-DDqZzPlDaV-bhfmBfgP9h_T6Vdzq4_XXBU
+# Authorization: Bearer
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJib29tZXJtYXRoIiwibmJmIjoxNzEzMzA4NDI0LCJyb2xlcyI6W10sImlzcyI6ImZhcm1lZCIsImlkIjoiMWZjOGFlMDUtZWExZC00ZjFjLThhMTAtOTBiZGMzZDdlODQ4IiwiZXhwIjoxNzEzMzEyMDI0LCJpYXQiOjE3MTMzMDg0MjR9.gY10lR0qMJSzufaW-ZbnBqyEPzzjTdmt0Db3D3cE0B8
+
+{
+  "stars": 4,
+  "text": "reviewsz"
+}

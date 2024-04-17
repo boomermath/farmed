@@ -1,6 +1,7 @@
 package com.boomermath.farmed.farm;
 
 import com.boomermath.farmed.farm.contact.Contact;
+import com.boomermath.farmed.farm.contact.social.Social;
 import com.boomermath.farmed.farm.review.Review;
 import com.boomermath.farmed.farm.schedule.DailySchedule;
 import jakarta.persistence.*;
@@ -24,8 +25,11 @@ public class Farm {
     @NonNull
     private String name;
 
-    private int rating;
-    private int reviewCount;
+    @Builder.Default
+    private double rating = 0;
+
+    @Builder.Default
+    private int reviewCount = 0;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "farm")
@@ -36,6 +40,10 @@ public class Farm {
     private Contact contact;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "farm")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "farm")
     private List<DailySchedule> schedule;
+
+    @ToString.Exclude
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "farm")
+    private List<Social> social;
 }

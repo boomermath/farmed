@@ -3,7 +3,6 @@ plugins {
     id('io.micronaut.application') version '4.2.1'
     id('io.micronaut.test-resources') version '4.2.1'
     id('io.micronaut.aot') version '4.2.1'
-    id('org.jooq.jooq-codegen-gradle') version '3.19.0'
 }
 
 version = '0.1'
@@ -32,12 +31,7 @@ dependencies {
 
     implementation("io.micronaut.data:micronaut-data-hibernate-reactive")
     implementation("io.vertx:vertx-pg-client")
-    implementation('io.micronaut.sql:micronaut-jooq')
-    implementation('org.jooq:jooq-meta:3.19.0')
-    implementation('org.jooq:jooq-codegen:3.19.0')
-    implementation('org.postgresql:postgresql:42.7.1')
     implementation('org.postgresql:r2dbc-postgresql:1.0.3.RELEASE')
-    jooqCodegen('org.postgresql:postgresql:42.7.1')
 
     implementation('io.micronaut.security:micronaut-security-jwt')
     implementation('io.micronaut.serde:micronaut-serde-jackson')
@@ -78,29 +72,3 @@ micronaut {
         configurationProperties.put('micronaut.security.jwks.enabled', 'false')
     }
 }
-
-jooq {
-    configuration {
-        jdbc {
-            driver = 'org.postgresql.Driver'
-            url = 'jdbc:postgresql://localhost:5432/farmed'
-            user = 'boomermath'
-            password = 'DAONE364'
-        }
-
-        generator {
-            database {
-                name = 'org.jooq.meta.postgres.PostgresDatabase'
-                inputSchema = 'public'
-            }
-
-            target {
-                packageName = 'com.boomermath.jooq'
-                directory = "$projectDir/target"
-            }
-        }
-    }
-
-
-}
-

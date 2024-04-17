@@ -1,6 +1,5 @@
 package com.boomermath.farmed.farm;
 
-import com.boomermath.farmed.jooq.Tables;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
@@ -18,11 +17,11 @@ import java.util.UUID;
 @Slf4j
 public class FarmController {
     private final FarmRepository farmRepository;
-    private final FarmService farmService;
     private final FarmDataMapper farmMapper;
 
     @Get
-    public Mono<FarmDTO> farmInfo(@PathVariable String farmId) {
-        return farmRepository.find(farmId);
+    public Mono<FarmDTO> farmInfo(@PathVariable UUID farmId) {
+        return farmRepository.find(farmId)
+                .map(farmMapper::toDTO);
     }
 }

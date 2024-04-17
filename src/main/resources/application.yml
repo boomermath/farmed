@@ -31,9 +31,3 @@ jpa:
           url: jdbc:postgresql://localhost:5432/farmed
           username: boomermath
           password: DAONE364
-jooq:
-  r2dbc-datasources:
-      sql-dialect: POSTGRES
-      url: jdbc:postgresql://localhost:5432/farmed
-      username: boomermath
-      password: DAONE364

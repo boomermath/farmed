@@ -25,7 +25,7 @@ public interface ReviewMapper {
             ),
             @Mapping(
                     to = "updated",
-                    from = "#{review.createdAt.isEqual(review.updatedAt)}"
+                    from = "#{!review?.createdAt?.isEqual(review.updatedAt)}"
             )
     })
     ReviewDTO toDTO(Review review);
